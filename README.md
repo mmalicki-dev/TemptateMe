@@ -1,49 +1,92 @@
-# TemptateMe
+# TemptaTeMe
 
-TemptateMe is an app for viewing or adding reciepes.
+A full stack recipe management application built with React and Node.js.
 
-## Genereal info
+## Features
 
-Create account and start enjoying cooking, search for recipes by title, by category or even ingredients. But don't stop at that. If you loved a recipe just add it to your favourites list or if you have an awesome idea for a recipe add one.
+**Recipes**
+- Browse and search recipes by title, category or ingredients
+- Add your own recipes with photos
+- Add recipes to your favourites list
+- Add ingredients to your shopping list
 
-## Technologies
+**Authentication**
+- User registration and login
+- JWT authentication
+- Password hashing with bcrypt
+- Email verification via SendGrid
 
-Used technologies:
+**Other**
+- Image upload via ImgBB
+- API documentation with Swagger
+- Rate limiting and security headers
 
-- JavaScript,
-- React,
-- Redux,
-- CSS,
-- HTML
+## Tech Stack
 
-## GH-Pages of project
+**Frontend:**
+React 18 · Redux Toolkit · React Router · Axios · Storybook
 
-[https://mattmalicki.github.io/TemptateMe/]
+**Backend:**
+Node.js · Express · MongoDB · Mongoose · JWT · Swagger · Multer · Joi
 
-## Install and run
+**Architecture:**
+Separate frontend and backend with shared environment configuration
 
-Remember to add every env variables before running project.
+**Testing:**
+React Testing Library
 
-Install all dependencies:
+## Live Demo
 
-```shell
-npm run install-all
+[temptateme.netlify.app](https://temptateme.netlify.app)
+
+Backend hosted on Render *(migrating to VPS)*
+
+## Coming Soon
+
+React Native mobile application
+
+## Running Locally
+
+### Prerequisites
+- Node.js 20+
+- pnpm
+- MongoDB
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/mmalicki-dev/TemptaTeMe.git
+cd TemptaTeMe
+
+# Install all dependencies
+pnpm install-all
+
+# Set up environment variables
+cp backend/.env.example backend/.env
+cp client/.env.example frontend/.env
+
+# Start all services
+pnpm start
+
+# Or start individually
+pnpm start-client
+pnpm start-server
 ```
 
-Run whole project in your localhost:
+### Environment Variables
 
-```shell
-npm start
+See [backend/.env.example](backend/.env.example)
+and [frontend/.env.example](client/.env.example)
+
+## Project Structure
+
+```
+TemptaTeMe/
+├── client/     # React + Redux
+└── backend/      # Node.js + Express + MongoDB
 ```
 
-Run only client:
+## License
 
-```shell
-npm start-client
-```
-
-Run only server:
-
-```shell
-npm start-server
-```
+MIT
