@@ -1,4 +1,4 @@
-# TemptaTeMe
+# TemptateMe
 
 A full stack recipe management application built with React and Node.js.
 
