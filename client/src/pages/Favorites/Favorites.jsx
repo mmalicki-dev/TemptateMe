@@ -6,7 +6,7 @@ import { useRecipes } from "../../hooks/index.js";
 import { useDispatch } from "react-redux";
 import { fetchFavorites } from "../../redux/recipes/operations";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const FavoritesPage = () => {
   const dispatch = useDispatch();

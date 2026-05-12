@@ -1,6 +1,6 @@
 import styles from "./NotFound.module.css";
 import image from "../../images/not_found_page.png";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const NotFoundPage = () => {
   return (

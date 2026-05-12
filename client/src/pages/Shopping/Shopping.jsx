@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { PageTitle } from "../../components/Atoms/PageTitle/PageTitle";
 import { ShoppingList } from "../../components/Organisms/ShoppingList/ShoppingList";
 import { fetchIngredients } from "../../redux/ingredients/operations";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const ShoppingPage = () => {
   const dispatch = useDispatch();

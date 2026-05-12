@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { useAuth } from "../../hooks/index";
 import { PrivateRoute } from "../../components/Atoms/PrivateRoute/PrivateRoute";
 import { RestrictedRoute } from "../../components/Atoms/RestrictedRoute/RestrictedRoute";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { SharedLayout } from "../SharedLayout/SharedLayout.jsx";
 
 import styles from "./App.module.css";

@@ -5,7 +5,7 @@ import { useRecipes } from "../../hooks/index.js";
 import { useDispatch } from "react-redux";
 import { fetchUserRecipes } from "../../redux/recipes/operations.js";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const MyRecipesPage = () => {
   const dispatch = useDispatch();

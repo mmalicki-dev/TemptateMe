@@ -11,7 +11,7 @@ import { CurvedInput } from "../../components/Molecules/CurvedInput/CurvedInput.
 import { RecipesList } from "../../components/Organisms/RecipesList/RecipesList.jsx";
 import useRecipes from "../../hooks/useRecipes.js";
 import { NotFound } from "../../components/Atoms/NotFound/NotFound.jsx";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { Pagination } from "../../components/Atoms/Pagination/Pagination.jsx";
 
 const SearchRecipePage = () => {

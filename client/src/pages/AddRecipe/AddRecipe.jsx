@@ -5,7 +5,7 @@ import { fetchIngredients } from "../../redux/ingredients/operations.js";
 import { fetchAllCategories } from "../../redux/categories/operations.js";
 import { useEffect } from "react";
 import { AddRecipeForm } from "../../components/Organisms/AddRecipeForm/AddRecipeForm.jsx";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const AddRecipePage = () => {
   const dispatch = useDispatch();

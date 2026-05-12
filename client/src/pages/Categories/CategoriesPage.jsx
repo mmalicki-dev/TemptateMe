@@ -7,7 +7,7 @@ import { PageTitle } from "../../components/Atoms/PageTitle/PageTitle.jsx";
 import { RecipesList } from "../../components/Organisms/RecipesList/RecipesList.jsx";
 import { Pagination } from "../../components/Atoms/Pagination/Pagination.jsx";
 import useRecipes from "../../hooks/useRecipes.js";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const CategoriesPage = () => {
   const dispatch = useDispatch();
