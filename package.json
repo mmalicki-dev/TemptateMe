@@ -1,17 +1,26 @@
 {
-  "name": "wallet",
+  "name": "temptate-me",
   "version": "1.0.0",
-  "description": "Manage your finances",
+  "description": "Recipe management app",
   "main": "index.js",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "install-all": "cd ./server && npm install && cd ./client && npm install",
-    "start-server": "cd ./server && node server",
-    "start-client": "cd ./client && npm start",
-    "start": "npm run start-server && npm run start-client",
-    "dev-server": "cd ./server && nodemon server"
+    "start:server": "pnpm --filter server run start",
+    "start:client": "pnpm --filter client run start",
+    "dev:server": "pnpm --filter server run dev",
+    "dev:client": "pnpm --filter client run start",
+    "build:client": "pnpm --filter client run build"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "core-js",
+      "core-js-pure",
+      "@parcel/watcher"
+    ]
+  }
 }
