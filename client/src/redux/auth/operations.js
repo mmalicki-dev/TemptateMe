@@ -2,12 +2,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-const REACT_APP_API_URL = process.env.REACT_APP_API_URL; // http://localhost:3001/ap/
-const SERVER_PORT = process.env.REACT_APP_SERVER_PORT; // 3001
-const MAIN_ENDPOINT = process.env.REACT_APP_MAIN_ENDPOINT; // api/
+const API_URL = import.meta.env.VITE_API_URL;
+const SERVER_PORT = import.meta.env.VITE_SERVER_PORT;
+const MAIN_ENDPOINT = import.meta.env.VITE_MAIN_ENDPOINT;
 
 axios.defaults.baseURL =
-  REACT_APP_API_URL || `http://localhost:${SERVER_PORT}${MAIN_ENDPOINT}`;
+  API_URL || `http://localhost:${SERVER_PORT}${MAIN_ENDPOINT}`;
 
 const setAuthHeader = (token) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;

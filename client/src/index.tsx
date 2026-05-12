@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 
-import { DarkModeProvider } from "./context/DarkModeContext.js";
+import { DarkModeProvider } from "./context/DarkModeContext.tsx";
 
 import { store, persistor } from "./redux/store";
 

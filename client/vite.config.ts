@@ -1,0 +1,20 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-oxc'
+import svgr from 'vite-plugin-svgr'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    svgr({
+      include: '**/*.svg',
+      svgrOptions: {
+        exportType: 'named',
+        namedExport: 'ReactComponent',
+      },
+    }),
+  ],
+  server: {
+    port: 3000,
+    open: true,
+  },
+})
