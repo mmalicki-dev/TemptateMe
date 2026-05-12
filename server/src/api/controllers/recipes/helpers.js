@@ -18,7 +18,6 @@ const getRecipesFromDbQuery = async ({ page = 0, limit = 8, query = "" }) => {
 };
 
 const getFavoritesRecipes = async ({ userId, page = 0, limit = 4 }) => {
-  console.log(userId);
   const recipes = await Recipe.find({
     favorites: new Types.ObjectId(userId),
   })
@@ -32,7 +31,7 @@ const getFavoritesRecipes = async ({ userId, page = 0, limit = 4 }) => {
 
 const getPopularRecipesFromDb = async ({ page = 0, limit = 8 }) => {
   const recipes = await Recipe.find({})
-    .sort({ favorites: 1 })
+    .sort({ favorites: -1 })
     .skip(page * limit)
     .limit(limit);
   const docNumbers = await Recipe.find({}).countDocuments();
@@ -65,7 +64,7 @@ const getRecipesFromDbCategory = async ({
     .limit(limit);
   const docNumbers = await Recipe.find({
     category: { $regex: `.*${category}.*`, $options: "i" },
-  }).count();
+  }).countDocuments();
   return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
 };
 

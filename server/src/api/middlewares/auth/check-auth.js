@@ -11,7 +11,7 @@ export default async (req, res, next) => {
   if (!token) return res.status(401).json(errorHelper('00006', req));
 
   if (token.includes('Bearer'))
-    token = req.header('Authorization').replace('Bearer ', '');
+    token = token.replace('Bearer ', '');
 
   try {
     req.user = verify(token, jwtSecretKey);

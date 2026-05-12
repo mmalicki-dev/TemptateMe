@@ -15,7 +15,7 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     dispatch(fetchAllCategories());
-  });
+  }, [dispatch]);
   return (
     <div className={styles.CategoriesPage}>
       <Helmet>
