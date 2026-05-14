@@ -12,12 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { Loading } from "notiflix/build/notiflix-loading-aio";
-import useRecipes from "../../../hooks/useRecipes.js";
 
 const AddRecipeForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { recipes } = useRecipes();
   const { isDark } = useDarkMode();
   const [recipeImage, setRecipeImage] = useState();
   const [recipeInfo, setRecipeInfo] = useState();
@@ -60,25 +58,21 @@ const AddRecipeForm = () => {
     recipeImage.files[0] && setRecipeImage(recipeImage.files[0]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    if (!recipeImage || !recipeInfo) {
+      Notify.failure("Please fill every field including image.");
+      return;
+    }
     try {
       Loading.pulse();
-      if (!recipeImage || !recipeInfo) {
-        Notify.failure("Please fill evry informations including image.");
-        return;
-      }
-      dispatch(addRecipe({ recipeImage, recipeInfo }));
+      const result = await dispatch(addRecipe({ recipeImage, recipeInfo })).unwrap();
       localStorage.removeItem("recipeInfo");
       localStorage.removeItem("recipeImage");
-      setTimeout(() => {
-        navigate(`/recipe/${recipes._id}`);
-      }, 1000);
-      return;
+      navigate(`/recipe/${result.recipes._id}`);
     } catch (err) {
-      Notify.failure("Something went wrong. ");
+      Notify.failure("Something went wrong.");
       console.log(err);
-      return;
     } finally {
       Loading.remove();
     }
