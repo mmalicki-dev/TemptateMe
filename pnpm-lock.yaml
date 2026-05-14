@@ -13,9 +13,6 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.11.2
         version: 2.11.2(react-redux@9.2.0(@types/react@19.2.14)(react@19.2.6)(redux@5.0.1))(react@19.2.6)
-      axios:
-        specifier: ^1.16.0
-        version: 1.16.0
       notiflix:
         specifier: ^3.2.8
         version: 3.2.8

@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
-    "axios": "^1.16.0",
     "notiflix": "^3.2.8",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",

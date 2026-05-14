@@ -1,12 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import { api } from "../apiClient.js";
 
 const fetchShoppingList = createAsyncThunk(
   "shoppingList/fetchAll",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("user/shopping");
-      return response.data;
+      return await api.get("user/shopping");
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -17,8 +16,7 @@ const addProduct = createAsyncThunk(
   "shoppingList/addProduct",
   async (product, thunkAPI) => {
     try {
-      const response = await axios.post("user/shopping", product);
-      return response.data;
+      return await api.post("user/shopping", product);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -29,8 +27,7 @@ const deleteProduct = createAsyncThunk(
   "shoppingList/deleteProduct",
   async (id, thunkAPI) => {
     try {
-      const response = await axios.patch(`user/shopping`, id);
-      return response.data;
+      return await api.patch("user/shopping", id);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

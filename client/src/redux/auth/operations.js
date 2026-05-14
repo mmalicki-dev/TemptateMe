@@ -1,40 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
-import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL;
-const SERVER_PORT = import.meta.env.VITE_SERVER_PORT;
-const MAIN_ENDPOINT = import.meta.env.VITE_MAIN_ENDPOINT;
-
-axios.defaults.baseURL =
-  API_URL || `http://localhost:${SERVER_PORT}${MAIN_ENDPOINT}`;
-
-const setAuthHeader = (token) => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-};
-
-const clearAuthHeader = () => {
-  axios.defaults.headers.common.Authorization = "";
-};
+import { api, setAuthToken, clearAuthToken } from "../apiClient.js";
 
 const register = createAsyncThunk(
   "auth/register",
-  async (credentails, thunkAPI) => {
+  async (credentials, thunkAPI) => {
     try {
-      const response = await axios.post("auth/register", credentails);
-      setAuthHeader(response.data.confirmToken);
-      return response.data;
+      const data = await api.post("auth/register", credentials);
+      setAuthToken(data.confirmToken);
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
-const login = createAsyncThunk("auth/login", async (credentails, thunkAPI) => {
+const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
   try {
-    const response = await axios.post("auth/login", credentails);
-    setAuthHeader(response.data.accessToken);
-    return response.data;
+    const data = await api.post("auth/login", credentials);
+    setAuthToken(data.accessToken);
+    return data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -42,8 +26,8 @@ const login = createAsyncThunk("auth/login", async (credentails, thunkAPI) => {
 
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    await axios.post("auth/logout");
-    clearAuthHeader();
+    await api.post("auth/logout");
+    clearAuthToken();
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -58,9 +42,9 @@ const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
   }
 
   try {
-    setAuthHeader(persistedToken);
-    const response = await axios.get("auth/refresh");
-    return response.data;
+    setAuthToken(persistedToken);
+    const data = await api.get("auth/refresh");
+    return data;
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -68,8 +52,8 @@ const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
 
 const deleteUser = createAsyncThunk("auth/delete", async (_, thunkAPI) => {
   try {
-    await axios.delete("auth/delete");
-    clearAuthHeader();
+    await api.delete("auth/delete");
+    clearAuthToken();
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -81,28 +65,24 @@ const updateUsersAvatar = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("avatar", avatar);
-      const response = await axios.put("user/edit/avatar", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data;
+      const data = await api.put("user/edit/avatar", formData);
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const updateUsersInfo = createAsyncThunk(
   "auth/updateInfo",
   async (info, thunkAPI) => {
     try {
-      const response = await axios.put("user/edit/info", info);
-      return response.data;
+      const data = await api.put("user/edit/info", info);
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export {
