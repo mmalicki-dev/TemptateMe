@@ -12,7 +12,7 @@ import {
 import bcrypt from "bcryptjs";
 const { hash } = bcrypt;
 
-export default async (req, res, next) => {
+const register = async (req, res, next) => {
   try {
     const { error } = validateRegister(req.body);
     if (error) {
@@ -59,7 +59,7 @@ export default async (req, res, next) => {
       existsUsername = await User.exists({ username: username }).catch(
         (err) => {
           return res.status(500).json(errorHelper("00033", req, err.message));
-        }
+        },
       );
     } while (existsUsername);
 
@@ -89,7 +89,7 @@ export default async (req, res, next) => {
       user.language,
       "newCode",
       req,
-      res
+      res,
     );
     user.password = null;
     logger("00035", user._id, getText("en", "00035"), "Info", req);
@@ -103,6 +103,8 @@ export default async (req, res, next) => {
     return next(error);
   }
 };
+
+export default register;
 
 /**
  * @swagger
