@@ -1,9 +1,29 @@
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import styles from "./StartPage.module.css";
 import { Logo } from "../../components/Atoms/Logo/Logo.jsx";
 import { CurvedButton } from "../../components/Atoms/CurvedButton/CurvedButton.jsx";
+import { login } from "../../redux/auth/operations.js";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 
 const StartPage = () => {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleDemo = async () => {
+    setLoading(true);
+    try {
+      await dispatch(
+        login({ email: "example@example.com", password: "example" })
+      ).unwrap();
+    } catch {
+      Notify.failure("Demo account unavailable. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className={styles.StartPage}>
       <div className={styles.icon}>
@@ -23,6 +43,11 @@ const StartPage = () => {
           <CurvedButton title="Sign in" />
         </Link>
       </div>
+      <CurvedButton
+        title={loading ? "Loading..." : "Try Demo"}
+        isTransparent={true}
+        onClick={handleDemo}
+      />
     </section>
   );
 };
