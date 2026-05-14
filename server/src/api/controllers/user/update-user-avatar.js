@@ -1,4 +1,4 @@
-import { getText, errorHelper } from "../../../utils/index.js";
+﻿import { getText, errorHelper } from "../../../utils/index.js";
 import { imageApiKey } from "../../../config/index.js";
 import fs from "fs/promises";
 import { tmpDir } from "../../middlewares/index.js";
@@ -11,14 +11,14 @@ async function updateUsersAvatar(req, res, next) {
     const id = req.user._id;
     if (!id)
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00017") },
+        resultMessage: { en: getText("en", "00017") },
         resultCode: "00017",
       });
 
     const user = await getUserById(id);
     if (!user) {
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00052") },
+        resultMessage: { en: getText("en", "00052") },
         resultCode: "00052",
       });
     }
@@ -31,7 +31,7 @@ async function updateUsersAvatar(req, res, next) {
         `${tmpDir}${fileName}`
       ).catch((error) =>
         res.status(400).json({
-          resultMassage: "Something went wrong",
+          resultMessage: "Something went wrong",
           resultCode: "00000",
           error: error.message,
         })
@@ -40,7 +40,7 @@ async function updateUsersAvatar(req, res, next) {
     }
     await user.save();
     return res.status(200).json({
-      resultMassage: { en: getText("en", "00113") },
+      resultMessage: { en: getText("en", "00113") },
       resultCode: "00113",
       user,
     });

@@ -1,4 +1,4 @@
-import { getText } from "../../../utils/index.js";
+﻿import { getText } from "../../../utils/index.js";
 import { getOnlyShopping } from "./helpers.js";
 
 async function removeProduct(req, res, next) {
@@ -6,14 +6,14 @@ async function removeProduct(req, res, next) {
     const id = req.user._id;
     if (!id)
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00017") },
+        resultMessage: { en: getText("en", "00017") },
         resultCode: "00017",
       });
     const productId = req.body;
     const user = await getOnlyShopping(id);
     if (!user) {
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00052") },
+        resultMessage: { en: getText("en", "00052") },
         resultCode: "00052",
       });
     }
@@ -24,14 +24,14 @@ async function removeProduct(req, res, next) {
 
     if (index === -1) {
       return res.status(200).json({
-        resultMassage: { en: getText("en", "00104") },
+        resultMessage: { en: getText("en", "00104") },
         resultCode: "00104",
       });
     }
     user.shoppingList.splice(index, 1);
     await user.save();
     return res.status(200).json({
-      resultMassage: { en: getText("en", "00105") },
+      resultMessage: { en: getText("en", "00105") },
       resultCode: "00105",
       idProduct: productId.id,
     });

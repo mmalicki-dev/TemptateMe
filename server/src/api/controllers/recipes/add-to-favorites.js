@@ -1,4 +1,4 @@
-import { getText } from '../../../utils/index.js';
+﻿import { getText } from '../../../utils/index.js';
 import { addToFavoritesInDb } from './helpers.js';
 
 async function addToFavorites(req, res, next) {
@@ -7,7 +7,7 @@ async function addToFavorites(req, res, next) {
     const { recipeId } = req.params;
     await addToFavoritesInDb({ userId: id, recipeId });
     return res.status(204).json({
-      resultMassage: { en: getText('en', '00096') },
+      resultMessage: { en: getText('en', '00096') },
       resultCode: '00096',
     });
   } catch (error) {

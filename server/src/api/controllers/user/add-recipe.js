@@ -1,4 +1,4 @@
-import { getText } from "../../../utils/index.js";
+﻿import { getText } from "../../../utils/index.js";
 import { getOnlyRecipes } from "./helpers.js";
 import { createRecipeToDb } from "./helpers.js";
 import { Types } from "mongoose";
@@ -8,27 +8,27 @@ async function addRecipe(req, res, next) {
     const id = req.user._id;
     if (!id)
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00017") },
+        resultMessage: { en: getText("en", "00017") },
         resultCode: "00017",
       });
     const user = await getOnlyRecipes(id);
     if (!user) {
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00052") },
+        resultMessage: { en: getText("en", "00052") },
         resultCode: "00052",
       });
     }
     const recipe = req.body;
     if (!recipe) {
       return res.status(401).json({
-        resultMassage: { en: getText("en", "00099") },
+        resultMessage: { en: getText("en", "00099") },
         resultCode: "00099",
       });
     }
     const newRecipe = await createRecipeToDb({ recipe });
     if (!newRecipe) {
       return next({
-        resultMassage: { en: getText("en", "00108") },
+        resultMessage: { en: getText("en", "00108") },
         resultCode: "00108",
       });
     }
@@ -43,7 +43,7 @@ async function addRecipe(req, res, next) {
     user.createdRecipes.push(new Types.ObjectId(newRecipe.id));
     await user.save();
     return res.status(200).json({
-      resultMassage: { en: getText("en", "00100") },
+      resultMessage: { en: getText("en", "00100") },
       resultCode: "00100",
       recipes: newRecipe,
     });

@@ -1,4 +1,4 @@
-import { getText } from '../../../utils/index.js';
+﻿import { getText } from '../../../utils/index.js';
 import { getRecipesFromDbCategory } from './helpers.js';
 
 const getRecipesMainPage = async (req, res, next) => {
@@ -10,7 +10,7 @@ const getRecipesMainPage = async (req, res, next) => {
       responseArray.push({ category, recipes: response });
     }
     return res.status(200).json({
-      resultMassage: { en: getText('en', '00094') },
+      resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
       recipes: responseArray,
     });

@@ -1,4 +1,4 @@
-import { getText } from '../../../utils/index.js';
+﻿import { getText } from '../../../utils/index.js';
 import { getRecipesFromDbIngredient } from './helpers.js';
 
 const getRecipesByIngredient = async (req, res, next) => {
@@ -11,7 +11,7 @@ const getRecipesByIngredient = async (req, res, next) => {
       ingredientId,
     });
     return res.status(200).json({
-      resultMassage: { en: getText('en', '00094') },
+      resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
       ...response,
     });

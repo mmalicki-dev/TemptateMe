@@ -1,4 +1,4 @@
-import { getText } from "../../../utils/index.js";
+﻿import { getText } from "../../../utils/index.js";
 import { deleteFromFavoritesInDb } from "./helpers.js";
 
 async function deleteFromFavorites(req, res, next) {
@@ -7,7 +7,7 @@ async function deleteFromFavorites(req, res, next) {
     const { recipeId } = req.params;
     await deleteFromFavoritesInDb({ userId: id, recipeId });
     return res.status(200).json({
-      resultMassage: { en: getText("en", "00097") },
+      resultMessage: { en: getText("en", "00097") },
       resultCode: "00097",
       recipeId,
     });

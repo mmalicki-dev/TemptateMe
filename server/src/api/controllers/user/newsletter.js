@@ -1,4 +1,4 @@
-import { User } from '../../../models/index.js';
+﻿import { User } from '../../../models/index.js';
 import { errorHelper, getText } from '../../../utils/index.js';
 
 export default async (req, res, next) => {
@@ -10,14 +10,14 @@ export default async (req, res, next) => {
     }
     if (user.newsletter) {
       return res.status(400).json({
-        resultMassage: { en: getText('en', '00109') },
+        resultMessage: { en: getText('en', '00109') },
         resultCode: '00109',
       });
     }
     user.newsletter = true;
     await user.save();
     return res.status(200).json({
-      resultMassage: { en: getText('en', '00110') },
+      resultMessage: { en: getText('en', '00110') },
       resultCode: '00110',
     });
   } catch (error) {
