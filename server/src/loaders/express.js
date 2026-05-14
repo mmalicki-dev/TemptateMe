@@ -3,7 +3,7 @@ import cors from "cors";
 import compression from "compression";
 import morgan from "morgan";
 import helmet from "helmet";
-import { prefix, jwtSecretKey, clientUrl } from "./../config/index.js";
+import { prefix, clientUrl } from "./../config/index.js";
 import routes from "./../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { rateLimiter } from "../api/middlewares/index.js";
@@ -18,11 +18,6 @@ const server = (app) => {
   process.on("unhandledRejection", async (ex) => {
     logger("00002", "", ex.message, "Unhandled Rejection", "");
   });
-
-  if (!jwtSecretKey) {
-    logger("00003", "", "Jwtprivatekey is not defined", "Process-Env", "");
-    process.exit(1);
-  }
 
   app.set("views", path.join(process.cwd(), "src/views/"));
   app.set("view engine", "ejs");

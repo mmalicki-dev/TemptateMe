@@ -2,8 +2,18 @@ export { default as swaggerConfig } from './swagger.config.js';
 import { config } from 'dotenv';
 config();
 
-//NOTE: If you are running the project in an instance, you should store these secret keys in its configuration settings.
-// This type of storing secret information is only experimental and for the purpose of local running.
+const REQUIRED_ENV_VARS = [
+  'DB_URI',
+  'JWT_SECRET_KEY',
+  'REFRESH_TOKEN_SECRET_KEY',
+  'IMAGE_API_KEY',
+];
+
+const missing = REQUIRED_ENV_VARS.filter((key) => !process.env[key]);
+if (missing.length > 0) {
+  console.error(`[config] Missing required environment variables: ${missing.join(', ')}`);
+  process.exit(1);
+}
 
 const {
   DB_URI,
