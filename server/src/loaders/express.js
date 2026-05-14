@@ -8,9 +8,9 @@ import routes from "./../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { rateLimiter } from "../api/middlewares/index.js";
 import bodyParser from "body-parser";
-import path from "path";
+import path from "node:path";
 
-export default (app) => {
+const server = (app) => {
   process.on("uncaughtException", async (error) => {
     logger("00001", "", error.message, "Uncaught Exception", "");
   });
@@ -81,3 +81,5 @@ export default (app) => {
     });
   });
 };
+
+export default server;
