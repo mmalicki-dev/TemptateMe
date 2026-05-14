@@ -1,6 +1,6 @@
-import styles from "./CurvedInput.module.css";
+﻿import styles from "./CurvedInput.module.css";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.jsx";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const CurvedInput = ({
   placeholderText,

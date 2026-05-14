@@ -1,4 +1,4 @@
-import styles from "./Pagination.module.css";
+﻿import styles from "./Pagination.module.css";
 import { useRecipes } from "../../../hooks/index.js";
 import { useSearchParams } from "react-router-dom";
 import { ReactComponent as IconLeftArrow } from "./icon-left-arrow.svg";
@@ -6,7 +6,7 @@ import { ReactComponent as IconRightArrow } from "./icon-right-arrow.svg";
 import { useDispatch } from "react-redux";
 import { updatePage } from "../../../redux/recipes/operations.js";
 import { useEffect } from "react";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const Pagination = () => {
   const dispatch = useDispatch();

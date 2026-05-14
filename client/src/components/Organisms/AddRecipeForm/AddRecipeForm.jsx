@@ -1,4 +1,4 @@
-import { AddRecipeImage } from "../../Atoms/AddRecipeImage/AddRecipeImage.jsx";
+﻿import { AddRecipeImage } from "../../Atoms/AddRecipeImage/AddRecipeImage.jsx";
 import { AddRecipeInfo } from "../../Organisms/AddRecipeInfo/AddRecipeInfo.jsx";
 import { AddIngredients } from "../AddIngredients/AddIngredients.jsx";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.jsx";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { addRecipe } from "../../../redux/recipes/operations.js";
 
 import styles from "./AddRecipeForm.module.css";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Notify } from "notiflix/build/notiflix-notify-aio";

@@ -1,10 +1,10 @@
-import { useRecipes } from "../../../hooks";
+﻿import { useRecipes } from "../../../hooks";
 import styles from "./HomeRecipes.module.css";
 import { HomeRecipesList } from "../../Molecules/HomeRecipesList/HomeRecipesList.jsx";
 import { Link } from "react-router-dom";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.jsx";
 import { RectangleButton } from "../../Atoms/RectangleButton/RectangleButton.jsx";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 import { Loader } from "../../Atoms/Loader/Loader.jsx";
 
 const HomeRecipes = () => {

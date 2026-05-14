@@ -1,4 +1,4 @@
-import styles from "./HomeInfo.module.css";
+﻿import styles from "./HomeInfo.module.css";
 import { AboutApp } from "../../Molecules/AboutApp/AboutApp.jsx";
 import { CurvedInput } from "../../Molecules/CurvedInput/CurvedInput.jsx";
 import { HomeToRecipes } from "../../Molecules/HomeToRecipes/HomeToRecipes.jsx";
@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchRecipesByQuery } from "../../../redux/recipes/operations.js";
 import { useNavigate } from "react-router-dom";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const HomeInfo = () => {
   const [text, setText] = useState();

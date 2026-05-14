@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import styles from "./AddRecipeInfoInput.module.css";
 import { ReactComponent as IconDropdown } from "./icon-dropdown.svg";
 import { useCategories } from "../../../hooks/index.js";
 import { AddDropdownList } from "../../Atoms/AddDropdownList/AddDropdownList.jsx";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const AddRecipeInfoInput = ({
   placeholder,

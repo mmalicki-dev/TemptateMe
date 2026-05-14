@@ -1,4 +1,4 @@
-import { useEffect, lazy } from "react";
+﻿import { useEffect, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 
@@ -10,7 +10,7 @@ import { SharedLayout } from "../SharedLayout/SharedLayout.jsx";
 
 import styles from "./App.module.css";
 import { refresh } from "../../redux/auth/operations.js";
-import { useDarkMode } from "../../context/DarkModeContext.js";
+import { useDarkMode } from "../../context/DarkModeContext.jsx";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 
 const HomePage = lazy(() =>

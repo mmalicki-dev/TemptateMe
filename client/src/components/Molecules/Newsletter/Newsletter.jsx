@@ -1,7 +1,7 @@
-import styles from "./Newsletter.module.css";
+﻿import styles from "./Newsletter.module.css";
 import { RectangleInput } from "../RectangleInput/RectangleInput.jsx";
 import { RectangleButton } from "../../Atoms/RectangleButton/RectangleButton.jsx";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const Newsletter = () => {
   const { isDark } = useDarkMode();

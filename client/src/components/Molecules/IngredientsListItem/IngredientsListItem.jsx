@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+﻿import { useDispatch } from "react-redux";
 import styles from "./IngredientsListItem.module.css";
 import {
   addProduct,
@@ -6,7 +6,7 @@ import {
 } from "../../../redux/shopping/operations.js";
 import { useRecipes } from "../../../hooks/index.js";
 import { useState } from "react";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const IngredientsListItem = ({ ingredient, measure, isChecked = false }) => {
   const dispatch = useDispatch();

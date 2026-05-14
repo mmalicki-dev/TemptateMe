@@ -1,11 +1,11 @@
-import styles from "./UserWindow.module.css";
+﻿import styles from "./UserWindow.module.css";
 import { CurvedButton } from "../CurvedButton/CurvedButton.jsx";
 import { ReactComponent as LogoutIcon } from "./icon-logout.svg";
 import { ReactComponent as EditIcon } from "./icon-edit.svg";
 import { useEffect, useState } from "react";
 import { ModalLogout } from "../../Organisms/ModalLogout/ModalLogout.jsx";
 import { ModalEditUser } from "../../Organisms/ModalEditUser/ModalEditUser.jsx";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const UserWindow = ({ onClose }) => {
   const [modalLogout, setModalLogout] = useState(false);

@@ -1,10 +1,10 @@
-import { ReactComponent as Icon } from "./iconAddIngredientUnit.svg";
+﻿import { ReactComponent as Icon } from "./iconAddIngredientUnit.svg";
 import { useEffect, useState } from "react";
 
 import { AddDropdownList } from "../../Atoms/AddDropdownList/AddDropdownList.jsx";
 
 import styles from "./AddIngredientUnit.module.css";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const AddIngredientUnit = ({ index }) => {
   const [openDropdown, setOpenDropdown] = useState(false);

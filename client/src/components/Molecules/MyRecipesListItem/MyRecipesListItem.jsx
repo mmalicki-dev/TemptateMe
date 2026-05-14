@@ -1,4 +1,4 @@
-import styles from "./MyRecipesListItem.module.css";
+﻿import styles from "./MyRecipesListItem.module.css";
 import { ReactComponent as TrashIcon } from "./icon-trash.svg";
 import { Link } from "react-router-dom";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.jsx";
@@ -8,7 +8,7 @@ import {
   deleteFromFavorites,
   deleteRecipe,
 } from "../../../redux/recipes/operations.js";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const MyRecipesListItem = ({ recipe, isFavorites }) => {
   const { isDark } = useDarkMode();

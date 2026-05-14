@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 import { AddDropdownList } from "../../Atoms/AddDropdownList/AddDropdownList.jsx";
 import { ReactComponent as Icon } from "./iconAddIngredientName.svg";
@@ -6,7 +6,7 @@ import { ReactComponent as Icon } from "./iconAddIngredientName.svg";
 import { useIngredients } from "../../../hooks/index.js";
 
 import styles from "./AddIngredientName.module.css";
-import { useDarkMode } from "../../../context/DarkModeContext.js";
+import { useDarkMode } from "../../../context/DarkModeContext.jsx";
 
 const AddIngredientName = ({ index }) => {
   const [openDropdown, setOpenDropdown] = useState(false);
