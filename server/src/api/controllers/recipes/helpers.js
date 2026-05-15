@@ -1,55 +1,58 @@
 import { Recipe, Category, Ingredient } from "../../../models/index.js";
 import { Types } from "mongoose";
 
+const paginatedQuery = async (matchStage, sortStage, skip, limit) => {
+  const pipeline = [
+    { $match: matchStage },
+    ...(sortStage ? [{ $sort: sortStage }] : []),
+    {
+      $facet: {
+        docs: [{ $skip: skip }, { $limit: limit }],
+        count: [{ $count: "total" }],
+      },
+    },
+  ];
+  const [result] = await Recipe.aggregate(pipeline);
+  const total = result.count[0]?.total ?? 0;
+  return { recipes: result.docs, pageAmount: Math.ceil(total / limit) };
+};
+
 const getRecipeByIdFromDb = async (recipeId) => {
   return await Recipe.findById(recipeId);
 };
 
 const getRecipesFromDbQuery = async ({ page = 0, limit = 8, query = "" }) => {
-  const recipes = await Recipe.find({
-    title: { $regex: `.*${query}.*`, $options: "i" },
-  })
-    .skip(page * limit)
-    .limit(limit);
-  const docNumbers = await Recipe.find({
-    title: { $regex: `.*${query}.*`, $options: "i" },
-  }).countDocuments();
-  return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
+  return paginatedQuery(
+    { title: { $regex: `.*${query}.*`, $options: "i" } },
+    null,
+    page * limit,
+    limit
+  );
 };
 
 const getFavoritesRecipes = async ({ userId, page = 0, limit = 4 }) => {
-  const recipes = await Recipe.find({
-    favorites: new Types.ObjectId(userId),
-  })
-    .skip(page * limit)
-    .limit(limit);
-  const docNumbers = await Recipe.find({
-    favorites: new Types.ObjectId(userId),
-  }).countDocuments();
-  return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
+  return paginatedQuery(
+    { favorites: new Types.ObjectId(userId) },
+    null,
+    page * limit,
+    limit
+  );
 };
 
 const getPopularRecipesFromDb = async ({ page = 0, limit = 8 }) => {
-  const recipes = await Recipe.find({})
-    .sort({ favorites: -1 })
-    .skip(page * limit)
-    .limit(limit);
-  const docNumbers = await Recipe.find({}).countDocuments();
-  return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
+  return paginatedQuery({}, { favorites: -1 }, page * limit, limit);
 };
 
 const addToFavoritesInDb = async ({ userId, recipeId }) => {
   const recipe = await Recipe.findById(recipeId);
   recipe.favorites.push(new Types.ObjectId(userId));
   await recipe.save();
-  return;
 };
 
 const deleteFromFavoritesInDb = async ({ userId, recipeId }) => {
   const recipe = await Recipe.findById(recipeId);
   recipe.favorites.pull(new Types.ObjectId(userId));
   await recipe.save();
-  return;
 };
 
 const getRecipesFromDbCategory = async ({
@@ -57,15 +60,12 @@ const getRecipesFromDbCategory = async ({
   limit = 8,
   category = "",
 }) => {
-  const recipes = await Recipe.find({
-    category: { $regex: `.*${category}.*`, $options: "i" },
-  })
-    .skip(page * limit)
-    .limit(limit);
-  const docNumbers = await Recipe.find({
-    category: { $regex: `.*${category}.*`, $options: "i" },
-  }).countDocuments();
-  return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
+  return paginatedQuery(
+    { category: { $regex: `.*${category}.*`, $options: "i" } },
+    null,
+    page * limit,
+    limit
+  );
 };
 
 const getCategoriesFromDb = async () => {
@@ -85,15 +85,12 @@ const getRecipesFromDbIngredient = async ({
   limit = 8,
   ingredientId = "",
 }) => {
-  const recipes = await Recipe.find({
-    "ingredients.id": new Types.ObjectId(ingredientId),
-  })
-    .skip(page * limit)
-    .limit(limit);
-  const docNumbers = await Recipe.find({
-    "ingredients.id": new Types.ObjectId(ingredientId),
-  }).countDocuments();
-  return { recipes, pageAmount: Math.ceil(Number(docNumbers) / limit) };
+  return paginatedQuery(
+    { "ingredients.id": new Types.ObjectId(ingredientId) },
+    null,
+    page * limit,
+    limit
+  );
 };
 
 export {

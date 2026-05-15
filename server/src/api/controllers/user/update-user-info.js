@@ -19,7 +19,6 @@ async function updateUsersAvatar(req, res, next) {
       });
     }
     let body = req.body;
-    console.log(body);
 
     if (body.name) user.name = body.name;
     if (body.gender) user.gender = body.gender;
@@ -29,7 +28,7 @@ async function updateUsersAvatar(req, res, next) {
       const exist = await User.exists({ username: body.username }).catch(
         (err) => {
           return res.status(500).json(errorHelper("00083", req, err.message));
-        }
+        },
       );
       if (exist) return res.status(400).json(errorHelper("00084", req));
 

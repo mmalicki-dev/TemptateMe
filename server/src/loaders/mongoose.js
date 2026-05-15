@@ -1,15 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import { dbUri } from '../config/index.js';
+import { dbUri } from "../config/index.js";
 
-export default async () => {
-  mongoose.set('strictQuery', false);
+const dataBase = async () => {
+  mongoose.set("strictQuery", false);
   await mongoose
     .connect(dbUri, {})
     .then(() => {
-      console.log('Mongodb Connection');
+      console.log("MongoDB connected");
     })
-    .catch(err => {
-      console.log(err);
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
     });
 };
+
+export default dataBase;

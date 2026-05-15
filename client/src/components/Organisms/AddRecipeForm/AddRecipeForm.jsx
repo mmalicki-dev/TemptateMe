@@ -86,7 +86,7 @@ const AddRecipeForm = () => {
       navigate(`/recipe/${result.recipes._id}`);
     } catch (err) {
       Notify.failure("Something went wrong.");
-      console.log(err);
+      console.error(err);
     } finally {
       Loading.remove();
     }
