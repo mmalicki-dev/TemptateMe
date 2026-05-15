@@ -14,14 +14,9 @@ import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { Loading } from "notiflix/build/notiflix-loading-aio";
 
 function dataUrlToFile(dataurl, filename) {
-  const arr = dataurl.split(",");
-  const mime = arr[0].match(/:(.*?);/)[1];
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.codeCodeAt(n);
-  }
+  const [header, data] = dataurl.split(",");
+  const mime = header.match(/:(.*?);/)[1];
+  const u8arr = Uint8Array.from(atob(data), (c) => c.codePointAt(0));
   return new File([u8arr], filename, { type: mime });
 }
 
