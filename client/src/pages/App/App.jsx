@@ -68,6 +68,11 @@ const NotFoundPage = lazy(() =>
     default: module.NotFoundPage,
   }))
 );
+const EmailVerifiedPage = lazy(() =>
+  import("../EmailVerified/EmailVerifiedPage.jsx").then((module) => ({
+    default: module.EmailVerifiedPage,
+  }))
+);
 
 function App() {
   const { error } = useAuth();
@@ -157,6 +162,7 @@ function App() {
             path="/recipe/:recipeId"
             element={<PrivateRoute redirectTo="/" component={<Recipe />} />}
           />
+          <Route path="/email-verified" element={<EmailVerifiedPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

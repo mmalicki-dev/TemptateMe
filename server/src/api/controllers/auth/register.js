@@ -35,15 +35,6 @@ const register = async (req, res, next) => {
     const hashed = await hash(req.body.password, 10);
 
     const emailCode = generateRandomCode(4);
-    // await sendCodeToEmail(
-    //   req.body.email,
-    //   req.body.name,
-    //   emailCode,
-    //   (req.body.language = 'en'),
-    //   'register',
-    //   req,
-    //   res
-    // );
 
     let username = "";
     let tempName = "";
@@ -82,15 +73,7 @@ const register = async (req, res, next) => {
     user.confirmCode = confirmCodeToken;
     await user.save();
 
-    await sendCodeToEmail(
-      req.body.email,
-      user.name,
-      confirmCodeToken,
-      user.language,
-      "newCode",
-      req,
-      res,
-    );
+    await sendCodeToEmail(req.body.email, user.name, confirmCodeToken);
     user.password = null;
     logger("00035", user._id, getText("en", "00035"), "Info", req);
     return res.status(200).json({

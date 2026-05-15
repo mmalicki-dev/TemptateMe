@@ -8,7 +8,6 @@ import routes from "./../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { rateLimiter } from "../api/middlewares/index.js";
 import bodyParser from "body-parser";
-import path from "node:path";
 
 const server = (app) => {
   process.on("uncaughtException", async (error) => {
@@ -18,9 +17,6 @@ const server = (app) => {
   process.on("unhandledRejection", async (ex) => {
     logger("00002", "", ex.message, "Unhandled Rejection", "");
   });
-
-  app.set("views", path.join(process.cwd(), "src/views/"));
-  app.set("view engine", "ejs");
 
   app.enable("trust proxy");
   app.use(cors({ origin: clientUrl, credentials: true }));

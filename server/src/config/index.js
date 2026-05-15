@@ -7,6 +7,10 @@ const REQUIRED_ENV_VARS = [
   'JWT_SECRET_KEY',
   'REFRESH_TOKEN_SECRET_KEY',
   'IMAGE_API_KEY',
+  'EMAILJS_SERVICE_ID',
+  'EMAILJS_PUBLIC_KEY',
+  'EMAILJS_PRIVATE_KEY',
+  'EMAILJS_VERIFICATION_TEMPLATE_ID',
 ];
 
 const missing = REQUIRED_ENV_VARS.filter((key) => !process.env[key]);
@@ -20,27 +24,25 @@ const {
   PORT,
   JWT_SECRET_KEY,
   REFRESH_TOKEN_SECRET_KEY,
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  AWS_REGION,
-  BUCKET_NAME,
-  EMAIL_API_KEY,
-  USED_EMAIL,
   IMAGE_API_KEY,
   CLIENT_URL,
+  SERVER_URL,
+  EMAILJS_SERVICE_ID,
+  EMAILJS_PUBLIC_KEY,
+  EMAILJS_PRIVATE_KEY,
+  EMAILJS_VERIFICATION_TEMPLATE_ID,
 } = process.env;
 
 export const port = PORT || 3001;
 export const jwtSecretKey = JWT_SECRET_KEY;
 export const refreshTokenSecretKey = REFRESH_TOKEN_SECRET_KEY;
 export const dbUri = DB_URI;
-export const awsAccessKey = AWS_ACCESS_KEY_ID;
-export const awsSecretAccessKey = AWS_SECRET_ACCESS_KEY;
-export const awsRegion = AWS_REGION;
-export const bucketName = BUCKET_NAME;
 export const prefix = '/api';
 export const specs = '/docs';
-export const emailApiKey = EMAIL_API_KEY;
-export const usedEmail = USED_EMAIL;
 export const imageApiKey = IMAGE_API_KEY;
-export const clientUrl = CLIENT_URL ?? "http://localhost:3000";
+export const clientUrl = CLIENT_URL ?? 'http://localhost:3000';
+export const serverUrl = SERVER_URL ?? 'http://localhost:3001';
+export const emailjsServiceId = EMAILJS_SERVICE_ID;
+export const emailjsPublicKey = EMAILJS_PUBLIC_KEY;
+export const emailjsPrivateKey = EMAILJS_PRIVATE_KEY;
+export const emailjsVerificationTemplateId = EMAILJS_VERIFICATION_TEMPLATE_ID;

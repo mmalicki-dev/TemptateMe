@@ -6,7 +6,7 @@ export default async (req, res, next) => {
     const id = req.user._id;
     const user = await User.findById(id);
     if (!user) {
-      return res.status(500).json(errorHelper('00088', req, err.message));
+      return res.status(404).json(errorHelper('00088', req));
     }
     if (user.newsletter) {
       return res.status(400).json({
