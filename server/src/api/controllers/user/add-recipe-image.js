@@ -1,6 +1,6 @@
 ﻿import { getText } from "../../../utils/index.js";
 import { imageApiKey } from "../../../config/index.js";
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import { tmpDir } from "../../middlewares/index.js";
 import imgbbUploader from "imgbb-uploader";
 import { getRecipeByIdFromDb } from "../recipes/helpers.js";
@@ -23,17 +23,19 @@ async function addRecipeImage(req, res, next) {
       });
     }
 
+    if (!req.file) throw Error("Image not uploaded.");
+
     const fileName = req.file.originalname;
 
     const image = await imgbbUploader(
       imageApiKey,
-      `${tmpDir}${fileName}`
+      `${tmpDir}${fileName}`,
     ).catch((error) =>
       res.status(400).json({
         resultMessage: "Something went wrong",
         resultCode: "00000",
         error: error.message,
-      })
+      }),
     );
 
     if (image) {
@@ -51,7 +53,7 @@ async function addRecipeImage(req, res, next) {
   } catch (error) {
     return next(error);
   } finally {
-    fs.unlink(`${req.file.path}`);
+    if (req.file?.path) fs.unlink(req.file.path);
   }
 }
 

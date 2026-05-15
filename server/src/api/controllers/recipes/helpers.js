@@ -1,6 +1,8 @@
 import { Recipe, Category, Ingredient } from "../../../models/index.js";
 import { Types } from "mongoose";
 
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+
 const paginatedQuery = async (matchStage, sortStage, skip, limit) => {
   const pipeline = [
     { $match: matchStage },
@@ -23,7 +25,7 @@ const getRecipeByIdFromDb = async (recipeId) => {
 
 const getRecipesFromDbQuery = async ({ page = 0, limit = 8, query = "" }) => {
   return paginatedQuery(
-    { title: { $regex: `.*${query}.*`, $options: "i" } },
+    { title: { $regex: `.*${escapeRegex(query)}.*`, $options: "i" } },
     null,
     page * limit,
     limit
@@ -61,7 +63,7 @@ const getRecipesFromDbCategory = async ({
   category = "",
 }) => {
   return paginatedQuery(
-    { category: { $regex: `.*${category}.*`, $options: "i" } },
+    { category: { $regex: `.*${escapeRegex(category)}.*`, $options: "i" } },
     null,
     page * limit,
     limit
