@@ -1,7 +1,5 @@
 import { User, Token } from "../../../models/index.js";
-import { validateVerifyEmail } from "../../validators/user.validator.js";
 import {
-  errorHelper,
   getText,
   logger,
   signAccessToken,
@@ -13,7 +11,7 @@ import pkg from "jsonwebtoken";
 const { verify } = pkg;
 const redirectUrl = clientUrl;
 
-export default async (req, res) => {
+const verifyEmail = async (req, res) => {
   const { confirmCodeToken } = req.params;
   let title = "Welcome!";
   let info = "Your email has been confirmed";
@@ -72,6 +70,8 @@ export default async (req, res) => {
 
   return res.render("email", { redirectUrl, title, info });
 };
+
+export default verifyEmail;
 
 /**
  * @swagger

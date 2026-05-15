@@ -23,7 +23,7 @@ async function addRecipeImage(req, res, next) {
       });
     }
 
-    if (!req.file) throw Error("Image not uploaded.");
+    if (!req.file) throw new Error("Image not uploaded.");
 
     const fileName = req.file.originalname;
 
