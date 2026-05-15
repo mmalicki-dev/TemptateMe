@@ -21,7 +21,7 @@ const verifyEmail = async (req, res) => {
   } catch (err) {
     title = "Error";
     info = err.message;
-    return res.render(email, { redirectUrl, title, info });
+    return res.render("email", { redirectUrl, title, info });
   }
 
   const exists = await User.exists({
@@ -30,13 +30,13 @@ const verifyEmail = async (req, res) => {
   }).catch((err) => {
     title = "Error";
     info = err.message;
-    return res.render(email, { redirectUrl, title, info });
+    return res.render("email", { redirectUrl, title, info });
   });
 
   if (!exists) {
     title = "Error";
-    info = err.message;
-    return res.render(email, { redirectUrl, title, info });
+    info = "User not found or account not activated.";
+    return res.render("email", { redirectUrl, title, info });
   }
 
   await User.updateOne(
@@ -45,7 +45,7 @@ const verifyEmail = async (req, res) => {
   ).catch((err) => {
     title = "Error";
     info = err.message;
-    return res.render(email, { redirectUrl, title, info });
+    return res.render("email", { redirectUrl, title, info });
   });
 
   const accessToken = signAccessToken(req.user._id);
@@ -63,7 +63,7 @@ const verifyEmail = async (req, res) => {
   } catch (err) {
     title = "Error";
     info = err.message;
-    return res.render(email, { redirectUrl, title, info });
+    return res.render("email", { redirectUrl, title, info });
   }
 
   logger("00058", req.user._id, getText("en", "00058"), "Info", req);
