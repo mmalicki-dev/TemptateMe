@@ -28,7 +28,7 @@ export default async (req, res) => {
     return res.status(500).json(errorHelper('00060', req, err.message));
   });
 
-  if (userToken.refreshToken !== req.body.refreshToken || !userToken)
+  if (!userToken || userToken.refreshToken !== req.body.refreshToken)
     return res.status(404).json(errorHelper('00061', req));
 
   if (userToken.expiresIn <= Date.now() || !userToken.status)
