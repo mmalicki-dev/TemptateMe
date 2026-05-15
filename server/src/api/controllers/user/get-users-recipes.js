@@ -1,6 +1,6 @@
 ﻿import { getText } from "../../../utils/index.js";
 import { getOnlyRecipes } from "./helpers.js";
-import { getRecipeByIdFromDb } from "../recipes/helpers.js";
+import { Recipe } from "../../../models/index.js";
 
 async function getUsersRecipes(req, res, next) {
   try {
@@ -17,11 +17,7 @@ async function getUsersRecipes(req, res, next) {
         resultCode: "00103",
       });
     }
-    const recipes = [];
-    for (const recipeId of user.createdRecipes) {
-      const recipe = await getRecipeByIdFromDb(recipeId);
-      recipes.push(recipe);
-    }
+    const recipes = await Recipe.find({ _id: { $in: user.createdRecipes } });
     return res.status(200).json({
       resultMessage: { en: getText("en", "00094") },
       resultCode: "00094",
