@@ -8,10 +8,10 @@ import {
   signRefreshToken,
 } from "../../../utils/index.js";
 import ipHelper from "../../../utils/helpers/ip-helper.js";
-import { jwtSecretKey } from "../../../config/index.js";
+import { clientUrl, jwtSecretKey } from "../../../config/index.js";
 import pkg from "jsonwebtoken";
 const { verify } = pkg;
-const redirectUrl = "https://temptateme.netlify.app/";
+const redirectUrl = clientUrl;
 
 export default async (req, res) => {
   const { confirmCodeToken } = req.params;
@@ -43,7 +43,7 @@ export default async (req, res) => {
 
   await User.updateOne(
     { _id: req.user._id },
-    { $set: { isVerified: true } }
+    { $set: { isVerified: true } },
   ).catch((err) => {
     title = "Error";
     info = err.message;
