@@ -7,7 +7,7 @@ import {
   serverUrl,
 } from "../config/index.js";
 
-export default async function sendCodeToEmail(email, name, confirmCodeToken) {
+export default async function sendCodeToEmail(email: string, name: string, confirmCodeToken: string): Promise<void> {
   const verificationUrl = `${serverUrl}/api/auth/verify/${confirmCodeToken}`;
 
   await emailjs.send(
