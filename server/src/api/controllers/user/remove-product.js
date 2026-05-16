@@ -53,8 +53,8 @@ export default removeProduct;
  *          schema:
  *            type: string
  *          description: Put access token here
- *       requestBody:
- *        description: An object of a product that is nedded to be removed
+ *      requestBody:
+ *        description: An object of a product that is needed to be removed
  *        required: true
  *        content:
  *          application/json:

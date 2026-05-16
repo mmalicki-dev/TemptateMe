@@ -44,7 +44,7 @@ export default removeRecipe;
  *          schema:
  *            type: string
  *          description: Put access token here
- *       requestBody:
+ *      requestBody:
  *        description: An id of recipe
  *        required: true
  *        content:
