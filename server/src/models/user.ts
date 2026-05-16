@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema(
@@ -8,8 +8,6 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       lowercase: true,
-      match:
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
     },
     password: {
       type: String,
@@ -28,7 +26,7 @@ const userSchema = new Schema(
     },
     confirmCode: {
       type: String,
-      default: '',
+      default: "",
     },
     createdRecipes: {
       type: Array,
@@ -46,13 +44,13 @@ const userSchema = new Schema(
       you can control the authority of users with the help of this field.*/
     type: {
       type: String,
-      enum: ['admin', 'user', 'reader', 'creator'],
-      default: 'user',
+      enum: ["admin", "user", "reader", "creator"],
+      default: "user",
     },
     language: {
       type: String,
-      enum: ['tr', 'en'],
-      default: 'en',
+      enum: ["tr", "en"],
+      default: "en",
     },
     isPremium: {
       type: Boolean,
@@ -61,7 +59,7 @@ const userSchema = new Schema(
     //NOTE: You can change the gender options acc. to your needs in the app.
     gender: {
       type: String,
-      enum: ['male', 'female', 'other'],
+      enum: ["male", "female", "other"],
     },
     countryCode: {
       type: String,
@@ -75,7 +73,7 @@ const userSchema = new Schema(
     photoUrl: {
       type: String,
       default:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png',
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png",
     },
     //NOTE: To check whether the account is active or not. When user deletes the account, you can store the information anonymously.
     isActivated: {
@@ -94,9 +92,9 @@ const userSchema = new Schema(
     //NOTE: You can add more options acc. to your need.
     platform: {
       type: String,
-      enum: ['Android', 'IOS'],
+      enum: ["Android", "IOS"],
       // required: true,
-      default: 'Android',
+      default: "Android",
     },
     //NOTE: In case the user delete its account, you can store its non-personalized information anonymously.
     deletedAt: {
@@ -105,10 +103,10 @@ const userSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const User = model('User', userSchema);
+const User = model("User", userSchema);
 export default User;
 
 /**
