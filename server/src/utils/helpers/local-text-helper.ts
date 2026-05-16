@@ -1,4 +1,4 @@
-export function turkishToEnglish(text) {
+export function turkishToEnglish(text: string): string {
   return text
     .replace(/Ğ/gim, 'g')
     .replace(/Ü/gim, 'u')

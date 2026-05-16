@@ -1,4 +1,4 @@
-export default {
+const tr: Record<string, string> = {
   verificationCodeTitle: 'Doğrulama Kodu - (Uygulama Adı)',
   verificationCodeBody: 'İşte doğrulama kodun:',
   welcomeCode: '(Uygulama Adı)"na hoş geldin,',
@@ -72,3 +72,5 @@ export default {
   '00089': 'Kullanıcı bilgileri başarılı bir şekilde alındı.',
   '00092': 'Hesabınız başarılı bir şekilde silindi.',
 };
+
+export default tr;

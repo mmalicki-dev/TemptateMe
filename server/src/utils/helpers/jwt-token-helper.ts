@@ -1,26 +1,15 @@
-import pkg from "jsonwebtoken";
-const { sign } = pkg;
-import { jwtSecretKey, refreshTokenSecretKey } from "../../config/index.js";
+import { sign } from 'jsonwebtoken';
+import { jwtSecretKey, refreshTokenSecretKey } from '../../config/index.js';
+import type { Types } from 'mongoose';
 
-export function signAccessToken(userId) {
-  const accessToken = sign({ _id: userId }, jwtSecretKey, {
-    expiresIn: "1h",
-  });
-  return accessToken;
+export function signAccessToken(userId: Types.ObjectId): string {
+  return sign({ _id: userId }, jwtSecretKey, { expiresIn: '1h' });
 }
-export function signRefreshToken(userId) {
-  const refreshToken = sign({ _id: userId }, refreshTokenSecretKey, {
-    expiresIn: "7d",
-  });
-  return refreshToken;
+
+export function signRefreshToken(userId: Types.ObjectId): string {
+  return sign({ _id: userId }, refreshTokenSecretKey, { expiresIn: '7d' });
 }
-export function signConfirmCodeToken(userId, confirmCode) {
-  const confirmCodeToken = sign(
-    { _id: userId, code: confirmCode },
-    jwtSecretKey,
-    {
-      expiresIn: "10m",
-    }
-  );
-  return confirmCodeToken;
+
+export function signConfirmCodeToken(userId: Types.ObjectId, confirmCode: string): string {
+  return sign({ _id: userId, code: confirmCode }, jwtSecretKey, { expiresIn: '10m' });
 }

@@ -1,4 +1,4 @@
-export default {
+const en: Record<string, string> = {
   verificationCodeTitle: 'Verification Code - (App Name)',
   verificationCodeBody: 'Here is your confirm code:',
   welcomeCode: 'Welcome to the (App Name),',
@@ -91,3 +91,5 @@ export default {
   '00112': 'User already doesnt subscribe to newsletter',
   '00113': 'User updated sucesfully',
 };
+
+export default en;
