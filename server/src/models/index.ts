@@ -11,3 +11,10 @@ export const Log = logModel;
 export const Recipe = recipeModel;
 export const Ingredient = ingredientModel;
 export const Category = categoryModel;
+
+export type { IUser, IShoppingItem } from './user.js';
+export type { IRecipe, IRecipeIngredient } from './recipe.js';
+export type { IIngredient } from './ingredient.js';
+export type { ICategory } from './category.js';
+export type { IToken } from './token.js';
+export type { ILog } from './log.js';

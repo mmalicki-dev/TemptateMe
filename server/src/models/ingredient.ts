@@ -1,7 +1,14 @@
-import mongoose from 'mongoose';
-const { Schema, model } = mongoose;
+import { Schema, model, Types } from "mongoose";
 
-const ingredientSchema = new Schema(
+export interface IIngredient {
+  _id: Types.ObjectId;
+  ttl: string;
+  desc: string;
+  t?: string;
+  thb: string;
+}
+
+const ingredientSchema = new Schema<IIngredient>(
   {
     _id: {
       type: Schema.Types.ObjectId,
@@ -24,9 +31,9 @@ const ingredientSchema = new Schema(
       required: true,
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
 
-const Ingredient = model('ingredient', ingredientSchema);
+const Ingredient = model<IIngredient>("ingredient", ingredientSchema);
 
 export default Ingredient;

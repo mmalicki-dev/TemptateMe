@@ -1,7 +1,27 @@
-import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+import { Schema, model, Types } from "mongoose";
 
-const userSchema = new Schema(
+export interface IShoppingItem {
+  _id: Types.ObjectId;
+  ingredientId: string;
+  measure: string;
+  recipeId: string;
+  recipeName: string;
+}
+
+export interface IUser {
+  email: string;
+  password: string;
+  username: string;
+  name: string;
+  confirmCode: string;
+  createdRecipes: Types.ObjectId[];
+  shoppingList: IShoppingItem[];
+  newsletter: boolean;
+  photoUrl: string;
+  isVerified: boolean;
+}
+
+const userSchema = new Schema<IUser>(
   {
     email: {
       type: String,
@@ -29,84 +49,35 @@ const userSchema = new Schema(
       default: "",
     },
     createdRecipes: {
-      type: Array,
+      type: [Schema.Types.ObjectId],
       select: false,
     },
     shoppingList: {
-      type: Array,
+      type: [
+        {
+          ingredientId: { type: String },
+          measure: { type: String },
+          recipeId: { type: String },
+          recipeName: { type: String },
+        },
+      ],
       select: false,
     },
     newsletter: {
       type: Boolean,
       default: false,
     },
-    /*NOTE: If you are using admin panel and controllers specific to admin panel,
-      you can control the authority of users with the help of this field.*/
-    type: {
-      type: String,
-      enum: ["admin", "user", "reader", "creator"],
-      default: "user",
-    },
-    language: {
-      type: String,
-      enum: ["tr", "en"],
-      default: "en",
-    },
-    isPremium: {
-      type: Boolean,
-      default: false,
-    },
-    //NOTE: You can change the gender options acc. to your needs in the app.
-    gender: {
-      type: String,
-      enum: ["male", "female", "other"],
-    },
-    countryCode: {
-      type: String,
-    },
-    timezone: {
-      type: Number,
-    },
-    birthDate: {
-      type: Date,
-    },
     photoUrl: {
       type: String,
       default:
         "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png",
     },
-    //NOTE: To check whether the account is active or not. When user deletes the account, you can store the information anonymously.
-    isActivated: {
-      type: Boolean,
-      default: true,
-    },
-    //NOTE: To check whether the user skipped the email-verification step or not. You can delete the unverified accounts day by day.
-    isVerified: {
-      type: Boolean,
-      // required: true,
-      default: false,
-    },
-    deviceId: {
-      type: String,
-    },
-    //NOTE: You can add more options acc. to your need.
-    platform: {
-      type: String,
-      enum: ["Android", "IOS"],
-      // required: true,
-      default: "Android",
-    },
-    //NOTE: In case the user delete its account, you can store its non-personalized information anonymously.
-    deletedAt: {
-      type: Date,
-    },
+    isVerified: { type: Boolean, default: false },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-const User = model("User", userSchema);
+const User = model<IUser>("User", userSchema);
 export default User;
 
 /**
@@ -122,34 +93,10 @@ export default User;
  *           type: string
  *         username:
  *           type: string
- *         type:
- *           type: string
- *           enum: ['user', 'admin', 'creator', 'reader']
- *         language:
- *           type: string
- *           enum: ['tr', 'en']
- *         isPremium:
- *           type: boolean
- *         gender:
- *           type: string
- *           enum: ['male', 'female', 'other']
- *         countryCode:
- *           type: string
- *         timezone:
- *           type: number
- *         birthDate:
- *           type: string
  *         photoUrl:
  *           type: string
- *         isActivated:
- *           type: boolean
  *         isVerified:
  *           type: boolean
- *         deviceId:
- *           type: string
- *         platform:
- *           type: string
- *           enum: ['Android', 'IOS']
- *         deletedAt:
- *           type: string
+ *         newsletter:
+ *           type: boolean
  */
