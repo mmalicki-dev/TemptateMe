@@ -1,26 +1,23 @@
 import { useSelector } from "react-redux";
+
+import type { RootState } from "../redux/store.ts";
+import type { Recipe } from "../types/index.ts";
 import {
-  selectRecipesIsLoading,
   selectRecipes,
+  selectRecipesIsLoading,
   selectRecipesPageAmount,
   selectRecipesError,
   selectRecipesPage,
-} from "../redux/recipes/selectors.js";
+} from "../redux/recipes/selectors.ts";
 
 const useRecipes = () => {
-  const isLoading = useSelector(selectRecipesIsLoading);
-  const pageAmount = useSelector(selectRecipesPageAmount);
-  const page = useSelector(selectRecipesPage);
-  const recipes = useSelector(selectRecipes);
-  const error = useSelector(selectRecipesError);
+  const isLoading = useSelector<RootState, boolean>(selectRecipesIsLoading);
+  const pageAmount = useSelector<RootState, number>(selectRecipesPageAmount);
+  const page = useSelector<RootState, number>(selectRecipesPage);
+  const recipes = useSelector<RootState, Recipe[]>(selectRecipes);
+  const error = useSelector<RootState, unknown>(selectRecipesError);
 
-  return {
-    isLoading,
-    recipes,
-    page,
-    pageAmount,
-    error,
-  };
+  return { isLoading, recipes, page, pageAmount, error };
 };
 
 export default useRecipes;
