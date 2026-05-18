@@ -1,13 +1,18 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getCategoriesFromDb } from './helpers.js';
 
-const getCategories = async (req, res, next) => {
-  const categories = await getCategoriesFromDb();
-  return res.status(200).json({
-    resultMessage: { en: getText('en', '00093') },
-    resultCode: '00093',
-    categories,
-  });
+const getCategories: RequestHandler = async (req, res) => {
+  try {
+    const categories = await getCategoriesFromDb();
+    res.status(200).json({
+      resultMessage: { en: getText('en', '00093') },
+      resultCode: '00093',
+      categories,
+    });
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
+  }
 };
 
 export default getCategories;
@@ -27,7 +32,7 @@ export default getCategories;
  *        - Categories
  *      responses:
  *        "200":
- *          description: You sucessfully fetchedcategories.
+ *          description: You sucessfully fetched categories.
  *          content:
  *              application/json:
  *                  schema:

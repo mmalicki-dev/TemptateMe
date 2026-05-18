@@ -1,20 +1,20 @@
-﻿import { getText } from "../../../utils/index.js";
-import { deleteFromFavoritesInDb } from "./helpers.js";
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
+import { deleteFromFavoritesInDb } from './helpers.js';
 
-async function deleteFromFavorites(req, res, next) {
+const deleteFromFavorites: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    const { recipeId } = req.params;
-    await deleteFromFavoritesInDb({ userId: id, recipeId });
-    return res.status(200).json({
-      resultMessage: { en: getText("en", "00097") },
-      resultCode: "00097",
+    const recipeId = req.params.recipeId as string;
+    await deleteFromFavoritesInDb({ userId: req.user!._id, recipeId });
+    res.status(200).json({
+      resultMessage: { en: getText('en', '00097') },
+      resultCode: '00097',
       recipeId,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
-}
+};
 
 export default deleteFromFavorites;
 
@@ -22,7 +22,7 @@ export default deleteFromFavorites;
  * @swagger
  * /recipes/favorites:
  *    delete:
- *      summary: Add recipe to favorites
+ *      summary: Delete recipe from favorites
  *      parameters:
  *        - in: header
  *          name: Authorization

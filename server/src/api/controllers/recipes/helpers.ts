@@ -1,9 +1,14 @@
 import { Recipe, Category, Ingredient } from "../../../models/index.js";
 import { Types } from "mongoose";
 
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+const escapeRegex = (str: string): string => str.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 
-const paginatedQuery = async (matchStage, sortStage, skip, limit) => {
+const paginatedQuery = async (
+  matchStage: Record<string, unknown>,
+  sortStage: Record<string, 1 | -1> | null,
+  skip: number,
+  limit: number,
+) => {
   const pipeline = [
     { $match: matchStage },
     ...(sortStage ? [{ $sort: sortStage }] : []),
@@ -19,79 +24,67 @@ const paginatedQuery = async (matchStage, sortStage, skip, limit) => {
   return { recipes: result.docs, pageAmount: Math.ceil(total / limit) };
 };
 
-const getRecipeByIdFromDb = async (recipeId) => {
-  return await Recipe.findById(recipeId);
+const getRecipeByIdFromDb = async (recipeId: string) => {
+  return Recipe.findById(recipeId);
 };
 
-const getRecipesFromDbQuery = async ({ page = 0, limit = 8, query = "" }) => {
+const getRecipesFromDbQuery = async ({ page = 0, limit = 8, query = "" }: { page?: number; limit?: number; query?: string }) => {
   return paginatedQuery(
     { title: { $regex: `.*${escapeRegex(query)}.*`, $options: "i" } },
     null,
     page * limit,
-    limit
+    limit,
   );
 };
 
-const getFavoritesRecipes = async ({ userId, page = 0, limit = 4 }) => {
+const getFavoritesRecipes = async ({ userId, page = 0, limit = 4 }: { userId: string; page?: number; limit?: number }) => {
   return paginatedQuery(
     { favorites: new Types.ObjectId(userId) },
     null,
     page * limit,
-    limit
+    limit,
   );
 };
 
-const getPopularRecipesFromDb = async ({ page = 0, limit = 8 }) => {
+const getPopularRecipesFromDb = async ({ page = 0, limit = 8 }: { page?: number; limit?: number }) => {
   return paginatedQuery({}, { favorites: -1 }, page * limit, limit);
 };
 
-const addToFavoritesInDb = async ({ userId, recipeId }) => {
-  const recipe = await Recipe.findById(recipeId);
-  recipe.favorites.push(new Types.ObjectId(userId));
-  await recipe.save();
+const addToFavoritesInDb = async ({ userId, recipeId }: { userId: string; recipeId: string }) => {
+  await Recipe.updateOne({ _id: recipeId }, { $addToSet: { favorites: new Types.ObjectId(userId) } });
 };
 
-const deleteFromFavoritesInDb = async ({ userId, recipeId }) => {
-  const recipe = await Recipe.findById(recipeId);
-  recipe.favorites.pull(new Types.ObjectId(userId));
-  await recipe.save();
+const deleteFromFavoritesInDb = async ({ userId, recipeId }: { userId: string; recipeId: string }) => {
+  await Recipe.updateOne({ _id: recipeId }, { $pull: { favorites: new Types.ObjectId(userId) } });
 };
 
-const getRecipesFromDbCategory = async ({
-  page = 0,
-  limit = 8,
-  category = "",
-}) => {
+const getRecipesFromDbCategory = async ({ page = 0, limit = 8, category = "" }: { page?: number; limit?: number; category?: string }) => {
   return paginatedQuery(
     { category: { $regex: `.*${escapeRegex(category)}.*`, $options: "i" } },
     null,
     page * limit,
-    limit
+    limit,
   );
 };
 
 const getCategoriesFromDb = async () => {
-  return await Category.find({}).sort({ title: 1 });
+  return Category.find({}).sort({ title: 1 });
 };
 
 const getAllIngredientsFromDb = async () => {
-  return await Ingredient.find({});
+  return Ingredient.find({});
 };
 
-const getIngredientByIdFromDb = async (id) => {
-  return await Ingredient.findById(id);
+const getIngredientByIdFromDb = async (id: string) => {
+  return Ingredient.findById(id);
 };
 
-const getRecipesFromDbIngredient = async ({
-  page = 0,
-  limit = 8,
-  ingredientId = "",
-}) => {
+const getRecipesFromDbIngredient = async ({ page = 0, limit = 8, ingredientId = "" }: { page?: number; limit?: number; ingredientId?: string }) => {
   return paginatedQuery(
     { "ingredients.id": new Types.ObjectId(ingredientId) },
     null,
     page * limit,
-    limit
+    limit,
   );
 };
 

@@ -1,19 +1,18 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { addToFavoritesInDb } from './helpers.js';
 
-async function addToFavorites(req, res, next) {
+const addToFavorites: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    const { recipeId } = req.params;
-    await addToFavoritesInDb({ userId: id, recipeId });
-    return res.status(204).json({
+    await addToFavoritesInDb({ userId: req.user!._id, recipeId: req.params.recipeId as string });
+    res.status(200).json({
       resultMessage: { en: getText('en', '00096') },
       resultCode: '00096',
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
-}
+};
 
 export default addToFavorites;
 

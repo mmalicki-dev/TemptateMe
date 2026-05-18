@@ -1,17 +1,20 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getRecipesFromDbQuery } from './helpers.js';
 
-const getRecipesQuery = async (req, res, next) => {
+const getRecipesQuery: RequestHandler = async (req, res) => {
   try {
-    const { page, limit, query } = req.query;
+    const page = Number(req.query.page as string) || undefined;
+    const limit = Number(req.query.limit as string) || undefined;
+    const query = req.query.query as string | undefined;
     const response = await getRecipesFromDbQuery({ page, limit, query });
-    return res.status(200).json({
+    res.status(200).json({
       resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
       ...response,
     });
-  } catch (error) {
-    next(error.message);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
 };
 

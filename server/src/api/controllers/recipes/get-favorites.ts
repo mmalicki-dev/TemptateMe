@@ -1,18 +1,19 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getFavoritesRecipes } from './helpers.js';
 
-const getFavorites = async (req, res, next) => {
+const getFavorites: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    const { page, limit } = req.query;
-    const response = await getFavoritesRecipes({ userId: id, page, limit });
-    return res.status(200).json({
+    const page = Number(req.query.page as string) || undefined;
+    const limit = Number(req.query.limit as string) || undefined;
+    const response = await getFavoritesRecipes({ userId: req.user!._id, page, limit });
+    res.status(200).json({
       resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
       ...response,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
 };
 

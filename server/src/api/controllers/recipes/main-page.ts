@@ -1,21 +1,23 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getRecipesFromDbCategory } from './helpers.js';
 
-const getRecipesMainPage = async (req, res, next) => {
+const getRecipesMainPage: RequestHandler = async (req, res) => {
   try {
     const categories = ['Breakfast', 'Miscellaneous', 'Chicken', 'Dessert'];
-    const responseArray = [];
-    for (const category of categories) {
-      const response = await getRecipesFromDbCategory({ limit: 4, category });
-      responseArray.push({ category, recipes: response });
-    }
-    return res.status(200).json({
+    const recipes = await Promise.all(
+      categories.map(async (category) => {
+        const response = await getRecipesFromDbCategory({ limit: 4, category });
+        return { category, ...response };
+      }),
+    );
+    res.status(200).json({
       resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
-      recipes: responseArray,
+      recipes,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
 };
 

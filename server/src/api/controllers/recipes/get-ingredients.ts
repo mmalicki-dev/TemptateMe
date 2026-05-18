@@ -1,16 +1,17 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getAllIngredientsFromDb } from './helpers.js';
 
-const getAllIngredients = async (req, res, next) => {
+const getAllIngredients: RequestHandler = async (req, res) => {
   try {
     const ingredients = await getAllIngredientsFromDb();
-    return res.status(200).json({
+    res.status(200).json({
       resultMessage: { en: getText('en', '00095') },
       resultCode: '00095',
       ingredients,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
 };
 

@@ -1,22 +1,20 @@
-﻿import { getText } from '../../../utils/index.js';
+import type { RequestHandler } from 'express';
+import { errorHelper, getText } from '../../../utils/index.js';
 import { getRecipesFromDbIngredient } from './helpers.js';
 
-const getRecipesByIngredient = async (req, res, next) => {
+const getRecipesByIngredient: RequestHandler = async (req, res) => {
   try {
-    const { page, limit } = req.query;
-    const { ingredientId } = req.params;
-    const response = await getRecipesFromDbIngredient({
-      page,
-      limit,
-      ingredientId,
-    });
-    return res.status(200).json({
+    const page = Number(req.query.page as string) || undefined;
+    const limit = Number(req.query.limit as string) || undefined;
+    const ingredientId = req.params.ingredientId as string;
+    const response = await getRecipesFromDbIngredient({ page, limit, ingredientId });
+    res.status(200).json({
       resultMessage: { en: getText('en', '00094') },
       resultCode: '00094',
       ...response,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
   }
 };
 
@@ -26,7 +24,7 @@ export default getRecipesByIngredient;
  * @swagger
  * /recipes/ingredients:
  *    get:
- *      summary: Fetch favorites recipes.
+ *      summary: Fetch recipes by ingredient.
  *      parameters:
  *        - in: header
  *          name: Authorization
