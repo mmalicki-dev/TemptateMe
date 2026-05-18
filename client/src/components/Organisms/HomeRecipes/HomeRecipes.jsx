@@ -1,4 +1,4 @@
-﻿import { useRecipes } from "../../../hooks";
+﻿import { useRecipes } from "../../../hooks/index.js";
 import styles from "./HomeRecipes.module.css";
 import { HomeRecipesList } from "../../Molecules/HomeRecipesList/HomeRecipesList.jsx";
 import { Link } from "react-router-dom";

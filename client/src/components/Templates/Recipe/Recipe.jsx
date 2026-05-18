@@ -2,7 +2,7 @@ import styles from "./Recipe.module.css";
 import { RecipeDetails } from "../../Molecules/RecipeDetails/RecipeDetails.jsx";
 import { IngredientsList } from "../../Organisms/IngredientsList/IngredientsList.jsx";
 import { PreparationList } from "../../Organisms/PreparationList/PreparationList.jsx";
-import { useRecipes } from "../../../hooks";
+import { useRecipes } from "../../../hooks/index.js";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { fetchShoppingList } from "../../../redux/shopping/operations.js";
