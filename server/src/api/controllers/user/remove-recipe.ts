@@ -1,35 +1,30 @@
-﻿import { getText } from "../../../utils/index.js";
-import { getOnlyRecipes, deleteRecipeInDb } from "./helpers.js";
+import type { RequestHandler } from "express";
 import { Types } from "mongoose";
+import { User } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
+import { deleteRecipeInDb } from "./helpers.js";
 
-async function removeRecipe(req, res, next) {
+const removeRecipe: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00017") },
-        resultCode: "00017",
-      });
-    const { recipeId } = req.params;
-    const user = await getOnlyRecipes(id);
-    if (!user) {
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00052") },
-        resultCode: "00052",
-      });
-    }
-    user.createdRecipes.pull(new Types.ObjectId(recipeId));
-    await deleteRecipeInDb(recipeId);
-    await user.save();
-    return res.status(200).json({
+    const recipeId = req.params.recipeId as string;
+
+    await Promise.all([
+      User.updateOne(
+        { _id: req.user!._id },
+        { $pull: { createdRecipes: new Types.ObjectId(recipeId) } },
+      ),
+      deleteRecipeInDb(recipeId),
+    ]);
+
+    res.status(200).json({
       resultMessage: { en: getText("en", "00107") },
       resultCode: "00107",
       recipeId,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
-}
+};
 
 export default removeRecipe;
 
@@ -59,7 +54,7 @@ export default removeRecipe;
  *        - Recipes
  *      responses:
  *        "200":
- *          description: Successfully removed product.
+ *          description: Successfully removed recipe.
  *          content:
  *              application/json:
  *                  schema:

@@ -1,35 +1,24 @@
-import { User } from "../../../models/index.js";
-import { Recipe } from "../../../models/index.js";
+import { User, Recipe } from "../../../models/index.js";
+import type { IRecipe } from "../../../models/index.js";
 
-const createRecipeToDb = async ({ recipe }) => {
-  const response = await new Recipe({ ...recipe });
-  return response;
+const createRecipeToDb = async ({ recipe }: { recipe: Partial<IRecipe> }) => {
+  return new Recipe({ ...recipe });
 };
 
-const deleteRecipeInDb = async (id) => {
-  const response = await Recipe.findByIdAndDelete(id);
-  return response;
+const deleteRecipeInDb = async (id: string) => {
+  return Recipe.findByIdAndDelete(id);
 };
 
-async function getUserById(id) {
-  const user = await User.findById(id);
-  return user;
-}
-
-async function getOnlyRecipes(id) {
-  const user = await User.findById(id).select("createdRecipes");
-  return user;
-}
-
-async function getOnlyShopping(id) {
-  const user = await User.findById(id).select("shoppingList");
-  return user;
-}
-
-export {
-  getUserById,
-  createRecipeToDb,
-  deleteRecipeInDb,
-  getOnlyRecipes,
-  getOnlyShopping,
+const getUserById = async (id: string) => {
+  return User.findById(id);
 };
+
+const getOnlyRecipes = async (id: string) => {
+  return User.findById(id).select("createdRecipes");
+};
+
+const getOnlyShopping = async (id: string) => {
+  return User.findById(id).select("shoppingList");
+};
+
+export { getUserById, createRecipeToDb, deleteRecipeInDb, getOnlyRecipes, getOnlyShopping };

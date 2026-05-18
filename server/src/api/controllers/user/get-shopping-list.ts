@@ -1,30 +1,24 @@
-﻿import { getText } from '../../../utils/index.js';
-import { getOnlyShopping } from './helpers.js';
+import type { RequestHandler } from "express";
+import { errorHelper, getText } from "../../../utils/index.js";
+import { getOnlyShopping } from "./helpers.js";
 
-async function getShoppingList(req, res, next) {
+const getShoppingList: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText('en', '00017') },
-        resultCode: '00017',
-      });
-    const { shoppingList } = await getOnlyShopping(id);
-    if (!shoppingList) {
-      return res.status(404).json({
-        resultMessage: { en: getText('en', '00102') },
-        resultCode: '00102',
-      });
+    const user = await getOnlyShopping(req.user!._id);
+    if (!user) {
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
-    return res.status(200).json({
-      resultMessage: { en: getText('en', '00101') },
-      resultCode: '00101',
-      shoppingList,
+
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00101") },
+      resultCode: "00101",
+      shoppingList: user.shoppingList,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
-}
+};
 
 export default getShoppingList;
 

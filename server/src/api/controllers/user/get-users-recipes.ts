@@ -1,33 +1,26 @@
-﻿import { getText } from "../../../utils/index.js";
-import { getOnlyRecipes } from "./helpers.js";
+import type { RequestHandler } from "express";
 import { Recipe } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
+import { getOnlyRecipes } from "./helpers.js";
 
-async function getUsersRecipes(req, res, next) {
+const getUsersRecipes: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00017") },
-        resultCode: "00017",
-      });
-    const user = await getOnlyRecipes(id);
+    const user = await getOnlyRecipes(req.user!._id);
     if (!user) {
-      return res.status(404).json({
-        resultMessage: { en: getText("en", "00103") },
-        resultCode: "00103",
-      });
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
+
     const recipes = await Recipe.find({ _id: { $in: user.createdRecipes } });
-    return res.status(200).json({
+    res.status(200).json({
       resultMessage: { en: getText("en", "00094") },
       resultCode: "00094",
       recipes,
-      pageAmount: 0,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
-}
+};
 
 export default getUsersRecipes;
 

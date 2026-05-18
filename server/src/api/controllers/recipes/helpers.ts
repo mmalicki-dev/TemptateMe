@@ -81,7 +81,7 @@ const getIngredientByIdFromDb = async (id: string) => {
 
 const getRecipesFromDbIngredient = async ({ page = 0, limit = 8, ingredientId = "" }: { page?: number; limit?: number; ingredientId?: string }) => {
   return paginatedQuery(
-    { "ingredients.id": new Types.ObjectId(ingredientId) },
+    { "ingredients.id": ingredientId },
     null,
     page * limit,
     limit,

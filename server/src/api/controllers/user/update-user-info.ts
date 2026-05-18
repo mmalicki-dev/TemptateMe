@@ -1,71 +1,54 @@
-﻿import { getText, errorHelper } from "../../../utils/index.js";
+import type { RequestHandler } from "express";
 import { User } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
 import { getUserById } from "./helpers.js";
 
-async function updateUsersAvatar(req, res, next) {
+const updateUserInfo: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00017") },
-        resultCode: "00017",
-      });
-
-    const user = await getUserById(id);
+    const user = await getUserById(req.user!._id);
     if (!user) {
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00052") },
-        resultCode: "00052",
-      });
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
-    let body = req.body;
 
-    if (body.name) user.name = body.name;
-    if (body.gender) user.gender = body.gender;
-    if (body.birthDate) user.birthDate = body.birthDate;
-    if (body.language) user.language = body.language;
-    if (body.username && body.username !== user.username) {
-      const exist = await User.exists({ username: body.username }).catch(
-        (err) => {
-          return res.status(500).json(errorHelper("00083", req, err.message));
-        },
-      );
-      if (exist) return res.status(400).json(errorHelper("00084", req));
+    if (req.body.name) user.name = req.body.name;
 
-      user.username = body.username;
+    if (req.body.username && req.body.username !== user.username) {
+      const exist = await User.exists({ username: req.body.username });
+      if (exist) {
+        res.status(400).json(errorHelper("00084", req));
+        return;
+      }
+      user.username = req.body.username;
     }
+
     await user.save();
-    return res.status(200).json({
+
+    res.status(200).json({
       resultMessage: { en: getText("en", "00113") },
       resultCode: "00113",
       user,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
-}
+};
 
-export default updateUsersAvatar;
+export default updateUserInfo;
 
 /**
  * @swagger
- * /user/edit:
+ * /user/info:
  *    put:
- *      summary: Edit the Profile Information
+ *      summary: Update user info
  *      parameters:
  *        - in: header
  *          name: Authorization
  *          schema:
  *            type: string
  *          description: Put access token here
- *        - in: formData
- *          name: avatar
- *          required: false
- *          schema:
- *            type: file
- *          description: Image file here
  *      requestBody:
- *        description: Some of the user profile information to change
+ *        description: User profile fields to update
  *        required: false
  *        content:
  *          application/json:
@@ -75,14 +58,6 @@ export default updateUsersAvatar;
  *                name:
  *                  type: string
  *                username:
- *                  type: string
- *                language:
- *                  type: string
- *                  enum: ['tr', 'en']
- *                gender:
- *                  type: string
- *                  enum: ['male', 'female', 'other']
- *                birthDate:
  *                  type: string
  *      tags:
  *        - User
@@ -98,10 +73,10 @@ export default updateUsersAvatar;
  *                              $ref: '#/components/schemas/ResultMessage'
  *                          resultCode:
  *                              $ref: '#/components/schemas/ResultCode'
- *                          photoUrl:
- *                              type: string
+ *                          user:
+ *                              $ref: '#/components/schemas/User'
  *        "400":
- *          description: Please provide valid values for each key you want to change.
+ *          description: Please provide valid values.
  *          content:
  *              application/json:
  *                  schema:

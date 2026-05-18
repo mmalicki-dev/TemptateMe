@@ -1,29 +1,36 @@
-﻿import { User } from '../../../models/index.js';
-import { errorHelper, getText } from '../../../utils/index.js';
+import type { RequestHandler } from "express";
+import { User } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
 
-export default async (req, res, next) => {
+const stopNewsletter: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    const user = await User.findById(id);
+    const user = await User.findById(req.user!._id);
     if (!user) {
-      return res.status(500).json(errorHelper('00088', req, err.message));
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
+
     if (!user.newsletter) {
-      return res.status(400).json({
-        resultMessage: { en: getText('en', '00112') },
-        resultCode: '00112',
+      res.status(400).json({
+        resultMessage: { en: getText("en", "00112") },
+        resultCode: "00112",
       });
+      return;
     }
+
     user.newsletter = false;
     await user.save();
-    return res.status(200).json({
-      resultMessage: { en: getText('en', '00111') },
-      resultCode: '00111',
+
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00111") },
+      resultCode: "00111",
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
 };
+
+export default stopNewsletter;
 
 /**
  * @swagger

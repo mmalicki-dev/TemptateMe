@@ -1,63 +1,58 @@
-﻿import { getText, errorHelper } from "../../../utils/index.js";
-import { imageApiKey } from "../../../config/index.js";
-import fs from "fs/promises";
-import { tmpDir } from "../../middlewares/index.js";
+import type { RequestHandler } from "express";
+import fs from "node:fs/promises";
 import imgbbUploader from "imgbb-uploader";
-import { User } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
+import { imageApiKey } from "../../../config/index.js";
+import { tmpDir } from "../../middlewares/index.js";
 import { getUserById } from "./helpers.js";
 
-async function updateUsersAvatar(req, res, next) {
+const updateUserAvatar: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00017") },
-        resultCode: "00017",
-      });
-
-    const user = await getUserById(id);
+    const user = await getUserById(req.user!._id);
     if (!user) {
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00052") },
-        resultCode: "00052",
-      });
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
 
-    if (req.file) {
-      const fileName = req.file.originalname;
+    if (!req.file) {
+      res.status(400).json(errorHelper("00008", req, "Image not uploaded."));
+      return;
+    }
 
+    try {
       const image = await imgbbUploader(
         imageApiKey,
-        `${tmpDir}${fileName}`
-      ).catch((error) =>
-        res.status(400).json({
-          resultMessage: "Something went wrong",
-          resultCode: "00000",
-          error: error.message,
-        })
+        `${tmpDir}${req.file.originalname}`,
       );
       user.photoUrl = image.url;
+    } catch (uploadErr) {
+      res
+        .status(400)
+        .json(errorHelper("00008", req, (uploadErr as Error).message));
+      return;
     }
+
     await user.save();
-    return res.status(200).json({
+
+    res.status(200).json({
       resultMessage: { en: getText("en", "00113") },
       resultCode: "00113",
       user,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   } finally {
-    fs.unlink(`${req.file.path}`);
+    if (req.file?.path) fs.unlink(req.file.path).catch(() => {});
   }
-}
+};
 
-export default updateUsersAvatar;
+export default updateUserAvatar;
 
 /**
  * @swagger
- * /user/edit:
+ * /user/avatar:
  *    put:
- *      summary: Edit the Profile Information
+ *      summary: Update user avatar
  *      parameters:
  *        - in: header
  *          name: Authorization
@@ -66,30 +61,10 @@ export default updateUsersAvatar;
  *          description: Put access token here
  *        - in: formData
  *          name: avatar
- *          required: false
+ *          required: true
  *          schema:
  *            type: file
  *          description: Image file here
- *      requestBody:
- *        description: Some of the user profile information to change
- *        required: false
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                name:
- *                  type: string
- *                username:
- *                  type: string
- *                language:
- *                  type: string
- *                  enum: ['tr', 'en']
- *                gender:
- *                  type: string
- *                  enum: ['male', 'female', 'other']
- *                birthDate:
- *                  type: string
  *      tags:
  *        - User
  *      responses:
@@ -104,10 +79,10 @@ export default updateUsersAvatar;
  *                              $ref: '#/components/schemas/ResultMessage'
  *                          resultCode:
  *                              $ref: '#/components/schemas/ResultCode'
- *                          photoUrl:
- *                              type: string
+ *                          user:
+ *                              $ref: '#/components/schemas/User'
  *        "400":
- *          description: Please provide valid values for each key you want to change.
+ *          description: Image upload failed.
  *          content:
  *              application/json:
  *                  schema:

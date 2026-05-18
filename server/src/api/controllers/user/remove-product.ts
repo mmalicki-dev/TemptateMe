@@ -1,44 +1,38 @@
-﻿import { getText } from "../../../utils/index.js";
+import type { RequestHandler } from "express";
+import { errorHelper, getText } from "../../../utils/index.js";
 import { getOnlyShopping } from "./helpers.js";
 
-async function removeProduct(req, res, next) {
+const removeProduct: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    if (!id)
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00017") },
-        resultCode: "00017",
-      });
-    const productId = req.body;
-    const user = await getOnlyShopping(id);
+    const user = await getOnlyShopping(req.user!._id);
     if (!user) {
-      return res.status(401).json({
-        resultMessage: { en: getText("en", "00052") },
-        resultCode: "00052",
-      });
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
 
-    const index = user.shoppingList.findIndex(
-      (item) => String(item._id) === productId.id
-    );
+    const productId = req.body.id as string;
+    const index = user.shoppingList.findIndex((item) => String(item._id) === productId);
 
     if (index === -1) {
-      return res.status(200).json({
+      res.status(404).json({
         resultMessage: { en: getText("en", "00104") },
         resultCode: "00104",
       });
+      return;
     }
+
     user.shoppingList.splice(index, 1);
     await user.save();
-    return res.status(200).json({
+
+    res.status(200).json({
       resultMessage: { en: getText("en", "00105") },
       resultCode: "00105",
-      idProduct: productId.id,
+      idProduct: productId,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
-}
+};
 
 export default removeProduct;
 
@@ -62,8 +56,6 @@ export default removeProduct;
  *              type: object
  *              properties:
  *                id:
- *                  type: string
- *                measure:
  *                  type: string
  *      tags:
  *        - User

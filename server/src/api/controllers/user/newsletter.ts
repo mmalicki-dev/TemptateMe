@@ -1,29 +1,36 @@
-﻿import { User } from '../../../models/index.js';
-import { errorHelper, getText } from '../../../utils/index.js';
+import type { RequestHandler } from "express";
+import { User } from "../../../models/index.js";
+import { errorHelper, getText } from "../../../utils/index.js";
 
-export default async (req, res, next) => {
+const newsletter: RequestHandler = async (req, res) => {
   try {
-    const id = req.user._id;
-    const user = await User.findById(id);
+    const user = await User.findById(req.user!._id);
     if (!user) {
-      return res.status(404).json(errorHelper('00088', req));
+      res.status(404).json(errorHelper("00052", req));
+      return;
     }
+
     if (user.newsletter) {
-      return res.status(400).json({
-        resultMessage: { en: getText('en', '00109') },
-        resultCode: '00109',
+      res.status(400).json({
+        resultMessage: { en: getText("en", "00109") },
+        resultCode: "00109",
       });
+      return;
     }
+
     user.newsletter = true;
     await user.save();
-    return res.status(200).json({
-      resultMessage: { en: getText('en', '00110') },
-      resultCode: '00110',
+
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00110") },
+      resultCode: "00110",
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
 };
+
+export default newsletter;
 
 /**
  * @swagger
