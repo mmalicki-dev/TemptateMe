@@ -2,24 +2,20 @@ import path from "path";
 import multer from "multer";
 import fs from "fs";
 
-const tmpDir = path.join(process.cwd(), "src/tmp/");
+export const tmpDir = path.join(process.cwd(), "src/tmp/");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_req, _file, cb) => {
     try {
-      if (!fs.existsSync(tmpDir)) {
-        fs.mkdirSync(tmpDir);
-      }
+      if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
     } catch (err) {
       console.error(err);
     }
     cb(null, tmpDir);
   },
-  filename: (req, file, cb) => {
+  filename: (_req, file, cb) => {
     cb(null, file.originalname);
   },
 });
 
-const fileMiddleware = multer({ storage });
-
-export { tmpDir, fileMiddleware };
+export const fileMiddleware = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
