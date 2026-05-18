@@ -17,8 +17,9 @@ const addRecipe: RequestHandler = async (req, res) => {
       return;
     }
 
-    const defaultUrl = "https://cdn.pixabay.com/photo/2012/04/28/18/16/food-43845_1280.png";
-    const newRecipe = createRecipeToDb({ recipe });
+    const defaultUrl =
+      "https://cdn.pixabay.com/photo/2012/04/28/18/16/food-43845_1280.png";
+    const newRecipe = await createRecipeToDb({ recipe });
     newRecipe.thumb = defaultUrl;
     newRecipe.preview = defaultUrl;
     await newRecipe.save();
