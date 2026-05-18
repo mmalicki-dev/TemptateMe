@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { api } from "../apiClient.js";
+import { api } from "../apiClient.ts";
 
 const fetchIngredients = createAsyncThunk(
   "ingredients/fetchAll",
@@ -9,18 +9,18 @@ const fetchIngredients = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const fetchIngredientById = createAsyncThunk(
   "ingredients/fetchByIngredient",
-  async (id, thunkAPI) => {
+  async (id: string, thunkAPI) => {
     try {
       return await api.get(`recipes/ingredients/${id}`);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export { fetchIngredients, fetchIngredientById };

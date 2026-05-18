@@ -62,7 +62,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
-        const payload = action.payload as {
+        const payload = action.payload as unknown as {
           user: User;
           accessToken?: string;
           confirmToken?: string;
@@ -95,7 +95,7 @@ const authSlice = createSlice({
         Notify.success("Logged out successfuly.");
       })
       .addCase(refresh.fulfilled, (state, action) => {
-        const payload = action.payload as { user: User };
+        const payload = action.payload as unknown as { user: User };
         state.user = payload.user;
         state.isLoggedIn = true;
         state.isRefreshing = false;
@@ -114,7 +114,7 @@ const authSlice = createSlice({
         );
       })
       .addCase(updateUsersAvatar.fulfilled, (state, action) => {
-        const payload = action.payload as { user: User };
+        const payload = action.payload as unknown as { user: User };
         if (state.user) state.user.photoUrl = payload.user.photoUrl;
         state.isLoggedIn = true;
         state.isRefreshing = false;
@@ -124,7 +124,7 @@ const authSlice = createSlice({
         Loading.remove();
       })
       .addCase(updateUsersInfo.fulfilled, (state, action) => {
-        const payload = action.payload as { user: User };
+        const payload = action.payload as unknown as { user: User };
         if (state.user) state.user.name = payload.user.name;
         state.isLoggedIn = true;
         state.isRefreshing = false;

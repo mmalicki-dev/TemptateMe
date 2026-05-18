@@ -43,17 +43,17 @@ const shoppingList = createSlice({
     builder
       .addCase(fetchShoppingList.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const payload = action.payload as { shoppingList: ShoppingItem[] };
+        const payload = action.payload as unknown as { shoppingList: ShoppingItem[] };
         state.items = payload.shoppingList;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const payload = action.payload as { newProduct: ShoppingItem };
+        const payload = action.payload as unknown as { newProduct: ShoppingItem };
         state.items.push(payload.newProduct);
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const { idProduct } = action.payload as { idProduct: string };
+        const { idProduct } = action.payload as unknown as { idProduct: string };
         const index = state.items.findIndex((item) => item._id === idProduct);
         if (index !== -1) state.items.splice(index, 1);
       })

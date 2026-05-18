@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { api } from "../apiClient.js";
+import { api } from "../apiClient.ts";
 
 const fetchAllCategories = createAsyncThunk(
   "categories/fetchAll",
@@ -9,7 +9,7 @@ const fetchAllCategories = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export { fetchAllCategories };

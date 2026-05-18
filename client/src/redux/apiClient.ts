@@ -52,7 +52,9 @@ async function request<T = unknown>(
   }
 
   const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  if (!text) return null;
+  const json = JSON.parse(text) as { ok: boolean; data?: T };
+  return json.data ?? null;
 }
 
 export const api = {

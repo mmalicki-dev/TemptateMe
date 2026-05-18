@@ -1,6 +1,6 @@
-export { default as useAuth } from "./useAuth";
-export { default as useCategories } from "./useCategories";
-export { default as useIngredients } from "./useIngredients";
-export { default as useRecipes } from "./useRecipes";
-export { default as useShopping } from "./useShopping";
-export { default as useWindowDimensions } from "./useWindowDimentions";
+export { default as useAuth } from "./useAuth.ts";
+export { default as useCategories } from "./useCategories.ts";
+export { default as useIngredients } from "./useIngredients.ts";
+export { default as useRecipes } from "./useRecipes.ts";
+export { default as useShopping } from "./useShopping.ts";
+export { default as useWindowDimensions } from "./useWindowDimentions.ts";

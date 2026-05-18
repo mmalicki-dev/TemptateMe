@@ -17,7 +17,7 @@ const categoriesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllCategories.fulfilled, (state, action) => {
-        const payload = action.payload as { categories: Category[] };
+        const payload = action.payload as unknown as { categories: Category[] };
         state.items = payload.categories;
         state.isLoading = false;
         state.error = null;

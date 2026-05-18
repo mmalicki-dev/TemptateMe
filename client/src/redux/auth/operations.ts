@@ -1,11 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { api, setAuthToken, clearAuthToken } from "../apiClient.js";
+import { api, setAuthToken, clearAuthToken } from "../apiClient.ts";
+import type { AuthState } from "../../types/index.ts";
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+interface RegisterCredentials {
+  email: string;
+  password: string;
+  name: string;
+}
+
+interface UpdateInfo {
+  name?: string;
+  username?: string;
+}
 
 const register = createAsyncThunk(
   "auth/register",
-  async (credentials, thunkAPI) => {
+  async (credentials: RegisterCredentials, thunkAPI) => {
     try {
-      const data = await api.post("auth/register", credentials);
+      const data = await api.post<{ confirmToken: string }>(
+        "auth/register",
+        credentials,
+      );
       setAuthToken(data.confirmToken);
       return data;
     } catch (error) {
@@ -14,15 +34,21 @@ const register = createAsyncThunk(
   },
 );
 
-const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
-  try {
-    const data = await api.post("auth/login", credentials);
-    setAuthToken(data.accessToken);
-    return data;
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
+const login = createAsyncThunk(
+  "auth/login",
+  async (credentials: LoginCredentials, thunkAPI) => {
+    try {
+      const data = await api.post<{ accessToken: string }>(
+        "auth/login",
+        credentials,
+      );
+      setAuthToken(data.accessToken);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
 
 const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
@@ -34,7 +60,7 @@ const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 });
 
 const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
-  const state = thunkAPI.getState();
+  const state = thunkAPI.getState() as { auth: AuthState };
   const persistedToken = state.auth.token;
 
   if (persistedToken === null) {
@@ -43,8 +69,7 @@ const refresh = createAsyncThunk("auth/refresh", async (_, thunkAPI) => {
 
   try {
     setAuthToken(persistedToken);
-    const data = await api.get("auth/refresh");
-    return data;
+    return await api.get("auth/refresh");
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
@@ -61,12 +86,11 @@ const deleteUser = createAsyncThunk("auth/delete", async (_, thunkAPI) => {
 
 const updateUsersAvatar = createAsyncThunk(
   "auth/updateAvatar",
-  async (avatar, thunkAPI) => {
+  async (avatar: File, thunkAPI) => {
     try {
       const formData = new FormData();
       formData.append("avatar", avatar);
-      const data = await api.put("user/edit/avatar", formData);
-      return data;
+      return await api.put("user/edit/avatar", formData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -75,10 +99,9 @@ const updateUsersAvatar = createAsyncThunk(
 
 const updateUsersInfo = createAsyncThunk(
   "auth/updateInfo",
-  async (info, thunkAPI) => {
+  async (info: UpdateInfo, thunkAPI) => {
     try {
-      const data = await api.put("user/edit/info", info);
-      return data;
+      return await api.put("user/edit/info", info);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

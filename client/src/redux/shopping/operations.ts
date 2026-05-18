@@ -1,5 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { api } from "../apiClient.js";
+import { api } from "../apiClient.ts";
+
+interface AddProductPayload {
+  id: string;
+  measure: string;
+  recipeId: string;
+  recipeName: string;
+}
+
+interface DeleteProductPayload {
+  id: string;
+}
 
 const fetchShoppingList = createAsyncThunk(
   "shoppingList/fetchAll",
@@ -9,29 +20,29 @@ const fetchShoppingList = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const addProduct = createAsyncThunk(
   "shoppingList/addProduct",
-  async (product, thunkAPI) => {
+  async (product: AddProductPayload, thunkAPI) => {
     try {
       return await api.post("user/shopping", product);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 const deleteProduct = createAsyncThunk(
   "shoppingList/deleteProduct",
-  async (id, thunkAPI) => {
+  async (payload: DeleteProductPayload, thunkAPI) => {
     try {
-      return await api.patch("user/shopping", id);
+      return await api.patch("user/shopping", payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
-  }
+  },
 );
 
 export { fetchShoppingList, addProduct, deleteProduct };

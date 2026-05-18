@@ -1,16 +1,19 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+
+import type { RootState } from "../redux/store.ts";
+import type { User } from "../types/index.ts";
 import {
   selectUser,
   selectIsLoggedIn,
   selectIsRefreshing,
   selectError,
-} from '../redux/auth/selector';
+} from "../redux/auth/selector.ts";
 
 const useAuth = () => {
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-  const isRefreshing = useSelector(selectIsRefreshing);
-  const user = useSelector(selectUser);
-  const error = useSelector(selectError);
+  const isLoggedIn = useSelector<RootState, boolean>(selectIsLoggedIn);
+  const isRefreshing = useSelector<RootState, boolean>(selectIsRefreshing);
+  const user = useSelector<RootState, User | null>(selectUser);
+  const error = useSelector<RootState, unknown>(selectError);
 
   return {
     isLoggedIn,

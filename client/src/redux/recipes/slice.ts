@@ -36,7 +36,7 @@ const handleFulfilled = (
   action: PayloadAction<unknown>,
 ): void => {
   clearLoadingError(state);
-  const payload = action.payload as { recipes?: Recipe[]; pageAmount?: number };
+  const payload = action.payload as unknown as { recipes?: Recipe[]; pageAmount?: number };
   if (payload.recipes) state.items = payload.recipes;
   if (payload.pageAmount) state.pageAmount = payload.pageAmount;
 };
@@ -66,21 +66,21 @@ const recipesSlice = createSlice({
     builder
       .addCase(addRecipe.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const payload = action.payload as { recipe: Recipe };
+        const payload = action.payload as unknown as { recipe: Recipe };
         state.items.push(payload.recipe);
       })
       .addCase(updatePage.fulfilled, (state, action) => {
-        state.page = action.payload as number;
+        state.page = action.payload as unknown as number;
       })
       .addCase(deleteRecipe.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const { recipeId } = action.payload as { recipeId: string };
+        const { recipeId } = action.payload as unknown as { recipeId: string };
         const index = state.items.findIndex((r) => r._id === recipeId);
         if (index !== -1) state.items.splice(index, 1);
       })
       .addCase(deleteFromFavorites.fulfilled, (state, action) => {
         clearLoadingError(state);
-        const { recipeId } = action.payload as { recipeId: string };
+        const { recipeId } = action.payload as unknown as { recipeId: string };
         const index = state.items.findIndex((r) => r._id === recipeId);
         if (index !== -1) state.items.splice(index, 1);
       })

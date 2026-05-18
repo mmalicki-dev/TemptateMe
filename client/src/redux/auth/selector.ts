@@ -1,13 +1,15 @@
 import type { RootState } from "../store.ts";
-import type { User } from "../../types/index.ts";
+import type { AuthState, User } from "../../types/index.ts";
 
-const selectIsLoggedIn = (state: RootState): boolean => state.auth.isLoggedIn;
+const auth = (state: RootState): AuthState => state.auth as AuthState;
 
-const selectUser = (state: RootState): User | null => state.auth.user;
+const selectIsLoggedIn = (state: RootState): boolean => auth(state).isLoggedIn;
+
+const selectUser = (state: RootState): User | null => auth(state).user;
 
 const selectIsRefreshing = (state: RootState): boolean =>
-  state.auth.isRefreshing;
+  auth(state).isRefreshing;
 
-const selectError = (state: RootState): unknown => state.auth.error;
+const selectError = (state: RootState): unknown => auth(state).error;
 
 export { selectIsLoggedIn, selectUser, selectIsRefreshing, selectError };

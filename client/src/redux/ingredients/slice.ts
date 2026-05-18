@@ -17,7 +17,7 @@ const ingredientsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.fulfilled, (state, action) => {
-        const payload = action.payload as { ingredients: Ingredient[] };
+        const payload = action.payload as unknown as { ingredients: Ingredient[] };
         state.items = payload.ingredients;
         state.isLoading = false;
         state.error = null;
