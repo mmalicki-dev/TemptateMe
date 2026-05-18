@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
 import jwt from "jsonwebtoken";
 import { User, Token } from "../../../models/index.js";
-import { errorHelper } from "../../../utils/index.js";
+import { fail } from "../../../utils/index.js";
 import { jwtSecretKey } from "../../../config/index.js";
 
 const { verify } = jwt;
@@ -14,7 +14,7 @@ export default async function checkAuth(
 ): Promise<void> {
   let token = req.header("Authorization");
   if (!token) {
-    res.status(401).json(errorHelper("00006", req));
+    fail(res, "Access denied. No token provided.", 401);
     return;
   }
 
@@ -23,37 +23,36 @@ export default async function checkAuth(
   try {
     req.user = verify(token, jwtSecretKey) as { _id: string };
   } catch (err) {
-    res.status(401).json(errorHelper("00012", req, (err as Error).message));
+    fail(res, "Invalid token.", 401);
     return;
   }
 
   if (!Types.ObjectId.isValid(req.user._id)) {
-    res.status(400).json(errorHelper("00007", req));
+    fail(res, "Invalid user id.", 400);
     return;
   }
 
   try {
     const exists = await User.exists({ _id: req.user._id, isVerified: true });
     if (!exists) {
-      res.status(400).json(errorHelper("00009", req));
+      fail(res, "User not found or not verified.", 401);
       return;
     }
   } catch (err) {
-    res.status(500).json(errorHelper("00008", req, (err as Error).message));
+    console.error((err as Error).message);
+    fail(res, "An internal server error occurred, please try again.", 500);
     return;
   }
 
   try {
-    const tokenExists = await Token.exists({
-      userId: req.user._id,
-      status: true,
-    });
+    const tokenExists = await Token.exists({ userId: req.user._id, status: true });
     if (!tokenExists) {
-      res.status(401).json(errorHelper("00011", req));
+      fail(res, "Session expired, please log in again.", 401);
       return;
     }
   } catch (err) {
-    res.status(500).json(errorHelper("00010", req, (err as Error).message));
+    console.error((err as Error).message);
+    fail(res, "An internal server error occurred, please try again.", 500);
     return;
   }
 

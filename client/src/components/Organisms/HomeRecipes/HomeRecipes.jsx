@@ -17,10 +17,10 @@ const HomeRecipes = () => {
       <ul className={styles.HomeRecipes}>
         {recipes.map((item, index) => {
           return (
-            <li key={index} className={styles.listItem}>
+            <li key={item._id} className={styles.listItem}>
               <span
                 className={[styles.categoryTitle, isDark && styles.isDark].join(
-                  " "
+                  " ",
                 )}
               >
                 {item.category}

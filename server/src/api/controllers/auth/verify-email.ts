@@ -2,17 +2,14 @@ import type { RequestHandler, Response } from "express";
 import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { User, Token } from "../../../models/index.js";
-import { getText, logger, signRefreshToken } from "../../../utils/index.js";
-import ipHelper from "../../../utils/helpers/ip-helper.js";
+import { signRefreshToken, ipHelper } from "../../../utils/index.js";
 import { clientUrl, jwtSecretKey } from "../../../config/index.js";
 
 const { verify } = jwt;
 
 const redirect = (res: Response, error: string | null): void => {
   if (error) {
-    res.redirect(
-      `${clientUrl}/email-verified?error=${encodeURIComponent(error)}`,
-    );
+    res.redirect(`${clientUrl}/email-verified?error=${encodeURIComponent(error)}`);
     return;
   }
   res.redirect(`${clientUrl}/email-verified?status=success`);
@@ -51,7 +48,6 @@ const verifyEmail: RequestHandler = async (req, res) => {
     });
     await token.save();
 
-    logger("00058", req.user._id, getText("en", "00058"), "Info", req);
     redirect(res, null);
   } catch (err) {
     redirect(res, (err as Error).message);

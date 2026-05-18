@@ -1,19 +1,19 @@
 import type { RequestHandler } from "express";
 import { Types } from "mongoose";
-import { errorHelper, getText } from "../../../utils/index.js";
+import { ok, fail } from "../../../utils/index.js";
 import { getOnlyRecipes, createRecipeToDb } from "./helpers.js";
 
 const addRecipe: RequestHandler = async (req, res) => {
   try {
     const user = await getOnlyRecipes(req.user!._id);
     if (!user) {
-      res.status(404).json(errorHelper("00052", req));
+      fail(res, "User not found.", 404);
       return;
     }
 
     const recipe = req.body;
     if (!recipe) {
-      res.status(400).json(errorHelper("00099", req));
+      fail(res, "Recipe data is required.", 400);
       return;
     }
 
@@ -27,55 +27,11 @@ const addRecipe: RequestHandler = async (req, res) => {
     user.createdRecipes.push(new Types.ObjectId(newRecipe.id));
     await user.save();
 
-    res.status(200).json({
-      resultMessage: { en: getText("en", "00100") },
-      resultCode: "00100",
-      recipes: newRecipe,
-    });
+    ok(res, { recipe: newRecipe });
   } catch (err) {
-    res.status(500).json(errorHelper("00008", req, (err as Error).message));
+    console.error((err as Error).message);
+    fail(res, "An internal server error occurred, please try again.", 500);
   }
 };
 
 export default addRecipe;
-
-/**
- * @swagger
- * /user/ownRecipe:
- *    post:
- *      summary: Add recipe
- *      parameters:
- *        - in: header
- *          name: Authorization
- *          schema:
- *            type: string
- *          description: Put access token here
- *      tags:
- *        - User
- *      responses:
- *        "200":
- *          description: Successfully created recipe.
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                      properties:
- *                          resultMessage:
- *                              $ref: '#/components/schemas/ResultMessage'
- *                          resultCode:
- *                              $ref: '#/components/schemas/ResultCode'
- *                          recipes:
- *                              type: object
- *        "401":
- *          description: Invalid token.
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Result'
- *        "500":
- *          description: An internal server error occurred, please try again.
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: '#/components/schemas/Result'
- */

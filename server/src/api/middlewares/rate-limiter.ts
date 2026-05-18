@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import { RateLimiterMongo } from 'rate-limiter-flexible';
-import { errorHelper } from '../../utils/index.js';
+import { fail } from '../../utils/index.js';
 
 const rateLimiterMongo = new RateLimiterMongo({
   storeClient: mongoose.connection,
@@ -14,7 +14,7 @@ export default function rateLimiter(req: Request, res: Response, next: NextFunct
   rateLimiterMongo
     .consume(req.ip ?? 'unknown')
     .then(() => next())
-    .catch((err: Error) => {
-      res.status(429).json(errorHelper('00024', req, err.message));
+    .catch(() => {
+      fail(res, "Too many requests, please try again later.", 429);
     });
 }
