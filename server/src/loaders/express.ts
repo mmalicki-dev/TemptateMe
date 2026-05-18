@@ -1,3 +1,4 @@
+import type { Express, Request, Response, NextFunction } from "express";
 import express from "express";
 import cors from "cors";
 import compression from "compression";
@@ -7,21 +8,25 @@ import { prefix, clientUrl } from "./../config/index.js";
 import routes from "./../api/routes/index.js";
 import { logger } from "../utils/index.js";
 import { rateLimiter } from "../api/middlewares/index.js";
-import bodyParser from "body-parser";
 
-const server = (app) => {
-  process.on("uncaughtException", async (error) => {
+interface HttpError extends Error {
+  status?: number;
+}
+
+export default function expressLoader(app: Express): void {
+  process.on("uncaughtException", (error: Error) => {
     logger("00001", "", error.message, "Uncaught Exception", "");
   });
 
-  process.on("unhandledRejection", async (ex) => {
-    logger("00002", "", ex.message, "Unhandled Rejection", "");
+  process.on("unhandledRejection", (ex: unknown) => {
+    const message = ex instanceof Error ? ex.message : String(ex);
+    logger("00002", "", message, "Unhandled Rejection", "");
   });
 
   app.enable("trust proxy");
   app.use(cors({ origin: clientUrl, credentials: true }));
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json());
   app.use(morgan("dev"));
   app.use(helmet());
   app.use(compression());
@@ -32,45 +37,34 @@ const server = (app) => {
   app.use(rateLimiter);
   app.use(prefix, routes);
 
-  app.get("/", (_req, res) => {
-    return res
-      .status(200)
-      .json({
-        resultMessage: {
-          en: "Project is successfully working...",
-          tr: "Proje başarılı bir şekilde çalışıyor...",
-        },
-        resultCode: "00004",
-      })
-      .end();
+  app.get("/", (_req: Request, res: Response) => {
+    res.status(200).json({
+      resultMessage: { en: "Project is successfully working..." },
+      resultCode: "00004",
+    });
   });
 
-  app.use((_req, _res, next) => {
-    const error = new Error("Endpoint could not find!");
+  app.use((_req: Request, _res: Response, next: NextFunction) => {
+    const error = new Error("Endpoint could not find!") as HttpError;
     error.status = 404;
     next(error);
   });
 
-  app.use((error, req, res, _next) => {
-    res.status(error.status || 500);
+  app.use((error: HttpError, req: Request, res: Response, _next: NextFunction) => {
+    const status = error.status ?? 500;
     let resultCode = "00015";
     let level = "External Error";
-    if (error.status === 500) {
+    if (status === 500) {
       resultCode = "00013";
       level = "Server Error";
-    } else if (error.status === 404) {
+    } else if (status === 404) {
       resultCode = "00014";
       level = "Client Error";
     }
     logger(resultCode, req?.user?._id ?? "", error.message, level, req);
-    return res.json({
-      resultMessage: {
-        en: error.message,
-        tr: error.message,
-      },
-      resultCode: resultCode,
+    res.status(status).json({
+      resultMessage: { en: error.message },
+      resultCode,
     });
   });
-};
-
-export default server;
+}
