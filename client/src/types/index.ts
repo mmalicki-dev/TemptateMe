@@ -104,10 +104,3 @@ export interface IngredientsState {
   error: unknown;
 }
 
-export interface RootState {
-  auth: AuthState;
-  recipes: RecipesState;
-  shopping: ShoppingState;
-  categories: CategoriesState;
-  ingredients: IngredientsState;
-}
