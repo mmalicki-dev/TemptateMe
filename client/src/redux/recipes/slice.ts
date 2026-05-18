@@ -36,7 +36,7 @@ const handleFulfilled = (
   action: PayloadAction<unknown>,
 ): void => {
   clearLoadingError(state);
-  const payload = action.payload as unknown as { recipes?: Recipe[]; pageAmount?: number };
+  const payload = action.payload as { recipes?: Recipe[]; pageAmount?: number };
   if (payload.recipes) state.items = payload.recipes;
   if (payload.pageAmount) state.pageAmount = payload.pageAmount;
 };
@@ -70,7 +70,7 @@ const recipesSlice = createSlice({
         state.items.push(payload.recipe);
       })
       .addCase(updatePage.fulfilled, (state, action) => {
-        state.page = action.payload as unknown as number;
+        state.page = action.payload;
       })
       .addCase(deleteRecipe.fulfilled, (state, action) => {
         clearLoadingError(state);
