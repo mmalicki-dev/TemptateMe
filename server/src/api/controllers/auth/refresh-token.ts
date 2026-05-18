@@ -1,10 +1,17 @@
 import type { RequestHandler } from "express";
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { Token } from "../../../models/index.js";
 import { validateRefreshToken } from "../../validators/user.validator.js";
-import { errorHelper, getText, ipHelper, signAccessToken, signRefreshToken } from "../../../utils/index.js";
+import {
+  errorHelper,
+  getText,
+  ipHelper,
+  signAccessToken,
+  signRefreshToken,
+} from "../../../utils/index.js";
 import { refreshTokenSecretKey } from "../../../config/index.js";
+const { verify } = jwt;
 
 const refreshToken: RequestHandler = async (req, res) => {
   try {
@@ -15,7 +22,9 @@ const refreshToken: RequestHandler = async (req, res) => {
     }
 
     try {
-      req.user = verify(req.body.refreshToken, refreshTokenSecretKey) as { _id: string };
+      req.user = verify(req.body.refreshToken, refreshTokenSecretKey) as {
+        _id: string;
+      };
     } catch (err) {
       res.status(400).json(errorHelper("00063", req, (err as Error).message));
       return;
@@ -39,7 +48,15 @@ const refreshToken: RequestHandler = async (req, res) => {
 
     await Token.updateOne(
       { userId },
-      { $set: { refreshToken: newRefreshToken, createdByIp: ipHelper(req), createdAt: Date.now(), expiresIn: Date.now() + 604800000, status: true } },
+      {
+        $set: {
+          refreshToken: newRefreshToken,
+          createdByIp: ipHelper(req),
+          createdAt: Date.now(),
+          expiresIn: Date.now() + 604800000,
+          status: true,
+        },
+      },
     );
 
     res.status(200).json({

@@ -1,10 +1,12 @@
 import type { RequestHandler, Response } from "express";
-import { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { User, Token } from "../../../models/index.js";
 import { getText, logger, signRefreshToken } from "../../../utils/index.js";
 import ipHelper from "../../../utils/helpers/ip-helper.js";
 import { clientUrl, jwtSecretKey } from "../../../config/index.js";
+
+const { verify } = jwt;
 
 const redirect = (res: Response, error: string | null): void => {
   if (error) {
