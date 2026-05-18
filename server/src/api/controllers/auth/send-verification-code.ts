@@ -1,3 +1,4 @@
+import type { RequestHandler } from 'express';
 import { User } from '../../../models/index.js';
 import { validateSendVerificationCode } from '../../validators/user.validator.js';
 import {
@@ -9,47 +10,41 @@ import {
   signConfirmCodeToken,
 } from '../../../utils/index.js';
 
-export default async (req, res) => {
-  const { error } = validateSendVerificationCode(req.body);
-  if (error)
-    return res
-      .status(400)
-      .json(errorHelper('00029', req, error.details[0].message));
+const sendVerificationCode: RequestHandler = async (req, res) => {
+  try {
+    const { error } = validateSendVerificationCode(req.body);
+    if (error) {
+      res.status(400).json(errorHelper('00029', req, error.details[0].message));
+      return;
+    }
 
-  const user = await User.findOne({
-    email: req.body.email,
-    isActivated: true,
-  }).catch(err => {
-    return res.status(500).json(errorHelper('00030', req, err.message));
-  });
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(404).json(errorHelper('00036', req));
+      return;
+    }
 
-  if (!user) return res.status(404).json(errorHelper('00036', req));
+    const emailCode = generateRandomCode(4);
+    const confirmCodeToken = signConfirmCodeToken(user._id, emailCode);
 
-  const emailCode = generateRandomCode(4);
-  await sendCodeToEmail(
-    req.body.email,
-    user.name,
-    emailCode,
-    user.language,
-    'newCode',
-    req,
-    res
-  );
+    user.confirmCode = confirmCodeToken;
+    user.isVerified = false;
+    await user.save();
 
-  user.isVerified = false;
+    await sendCodeToEmail(req.body.email, user.name, confirmCodeToken);
 
-  await user.save().catch(err => {
-    return res.status(500).json(errorHelper('00037', req, err.message));
-  });
-
-  const confirmCodeToken = signConfirmCodeToken(user._id, emailCode);
-  logger('00048', user._id, getText('en', '00048'), 'Info', req);
-  return res.status(200).json({
-    resultMessage: { en: getText('en', '00048'), tr: getText('tr', '00048') },
-    resultCode: '00048',
-    confirmToken: confirmCodeToken,
-  });
+    logger('00048', user._id.toHexString(), getText('en', '00048'), 'Info', req);
+    res.status(200).json({
+      resultMessage: { en: getText('en', '00048'), tr: getText('tr', '00048') },
+      resultCode: '00048',
+      confirmToken: confirmCodeToken,
+    });
+  } catch (err) {
+    res.status(500).json(errorHelper('00008', req, (err as Error).message));
+  }
 };
+
+export default sendVerificationCode;
 
 /**
  * @swagger

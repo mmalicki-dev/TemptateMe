@@ -1,48 +1,45 @@
+import type { RequestHandler } from "express";
+import { hash, compare } from "bcryptjs";
 import { User } from "../../../models/index.js";
 import { validateChangePassword } from "../../validators/user.validator.js";
 import { errorHelper, logger, getText } from "../../../utils/index.js";
-import bcrypt from "bcryptjs";
-const { hash, compare } = bcrypt;
 
-const changePassword = async (req, res) => {
-  const { error } = validateChangePassword(req.body);
-  if (error)
-    return res
-      .status(400)
-      .json(errorHelper("00069", req, error.details[0].message));
+const changePassword: RequestHandler = async (req, res) => {
+  try {
+    const { error } = validateChangePassword(req.body);
+    if (error) {
+      res.status(400).json(errorHelper("00069", req, error.details[0].message));
+      return;
+    }
 
-  if (req.body.oldPassword === req.body.newPassword)
-    return res.status(400).json(errorHelper("00073", req));
+    if (req.body.oldPassword === req.body.newPassword) {
+      res.status(400).json(errorHelper("00073", req));
+      return;
+    }
 
-  const user = await User.findById(req.user._id)
-    .select("password")
-    .catch((err) => {
-      return res.status(500).json(errorHelper("00070", req, err.message));
+    const user = await User.findById(req.user!._id).select("password");
+    if (!user) {
+      res.status(404).json(errorHelper("00052", req));
+      return;
+    }
+
+    const match = await compare(req.body.oldPassword, user.password);
+    if (!match) {
+      res.status(400).json(errorHelper("00072", req));
+      return;
+    }
+
+    user.password = await hash(req.body.newPassword, 10);
+    await user.save();
+
+    logger("00076", req.user!._id, getText("en", "00076"), "Info", req);
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00076"), tr: getText("tr", "00076") },
+      resultCode: "00076",
     });
-
-  const match = await compare(req.body.oldPassword, user.password).catch(
-    (err) => {
-      return res.status(500).json(errorHelper("00071", req, err.message));
-    },
-  );
-
-  if (!match) return res.status(400).json(errorHelper("00072", req));
-
-  const hashed = await hash(req.body.newPassword, 10).catch((err) => {
-    return res.status(500).json(errorHelper("00074", req, err.message));
-  });
-
-  user.password = hashed;
-
-  await user.save().catch((err) => {
-    return res.status(500).json(errorHelper("00075", req, err.message));
-  });
-
-  logger("00076", req.user._id, getText("en", "00076"), "Info", req);
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00076"), tr: getText("tr", "00076") },
-    resultCode: "00076",
-  });
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
+  }
 };
 
 export default changePassword;

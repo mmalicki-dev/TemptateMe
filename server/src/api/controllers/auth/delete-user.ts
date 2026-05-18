@@ -1,43 +1,30 @@
-import { User, Token } from "../../../models/index.js";
-import {
-  generateRandomCode,
-  errorHelper,
-  getText,
-  logger,
-} from "../../../utils/index.js";
-import bcrypt from "bcryptjs";
-const { hash } = bcrypt;
+import type { RequestHandler } from "express";
+import { User, Token, Recipe } from "../../../models/index.js";
+import { errorHelper, getText, logger } from "../../../utils/index.js";
 
-const deleteUser = async (req, res) => {
-  const anon = "anon" + generateRandomCode(8);
-  const hashed = await hash(anon, 10);
-  await User.updateOne(
-    { _id: req.user._id },
-    {
-      $set: {
-        name: anon,
-        username: anon,
-        email: anon + "@anon.com",
-        password: hashed,
-        photoUrl:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/1200px-Node.js_logo.svg.png",
-        isActivated: false,
-        deletedAt: Date.now(),
-      },
-    },
-  ).catch((err) => {
-    return res.status(500).json(errorHelper("00090", req, err.message));
-  });
+const deleteUser: RequestHandler = async (req, res) => {
+  try {
+    const userId = req.user!._id;
 
-  await Token.deleteOne({ userId: req.user._id }).catch((err) => {
-    return res.status(500).json(errorHelper("00091", req, err.message));
-  });
+    const user = await User.findById(userId).select("createdRecipes");
+    if (!user) {
+      res.status(404).json(errorHelper("00052", req));
+      return;
+    }
 
-  logger("00092", req.user._id, getText("en", "00092"), "Info", req);
-  return res.status(200).json({
-    resultMessage: { en: getText("en", "00092"), tr: getText("tr", "00092") },
-    resultCode: "00092",
-  });
+    await Recipe.deleteMany({ _id: { $in: user.createdRecipes } });
+    await Recipe.updateMany({ favorites: userId }, { $pull: { favorites: userId } });
+    await Token.deleteOne({ userId });
+    await User.deleteOne({ _id: userId });
+
+    logger("00092", userId, getText("en", "00092"), "Info", req);
+    res.status(200).json({
+      resultMessage: { en: getText("en", "00092"), tr: getText("tr", "00092") },
+      resultCode: "00092",
+    });
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
+  }
 };
 
 export default deleteUser;

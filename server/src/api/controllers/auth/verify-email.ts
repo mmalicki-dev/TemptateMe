@@ -1,44 +1,46 @@
+import type { RequestHandler, Response } from "express";
+import { verify } from "jsonwebtoken";
+import { Types } from "mongoose";
 import { User, Token } from "../../../models/index.js";
-import { getText, logger, signAccessToken, signRefreshToken } from "../../../utils/index.js";
+import { getText, logger, signRefreshToken } from "../../../utils/index.js";
 import ipHelper from "../../../utils/helpers/ip-helper.js";
 import { clientUrl, jwtSecretKey } from "../../../config/index.js";
-import pkg from "jsonwebtoken";
-const { verify } = pkg;
 
-const redirect = (res, error) => {
+const redirect = (res: Response, error: string | null): void => {
   if (error) {
-    return res.redirect(`${clientUrl}/email-verified?error=${encodeURIComponent(error)}`);
+    res.redirect(
+      `${clientUrl}/email-verified?error=${encodeURIComponent(error)}`,
+    );
+    return;
   }
-  return res.redirect(`${clientUrl}/email-verified?status=success`);
+  res.redirect(`${clientUrl}/email-verified?status=success`);
 };
 
-const verifyEmail = async (req, res) => {
-  const { confirmCodeToken } = req.params;
+const verifyEmail: RequestHandler = async (req, res) => {
+  const confirmCodeToken = req.params.confirmCodeToken as string;
 
   try {
-    req.user = verify(confirmCodeToken, jwtSecretKey);
+    req.user = verify(confirmCodeToken, jwtSecretKey) as { _id: string };
   } catch (err) {
-    return redirect(res, err.message);
+    redirect(res, (err as Error).message);
+    return;
   }
 
-  const exists = await User.exists({
-    _id: req.user._id,
-    isActivated: true,
-  }).catch((err) => redirect(res, err.message));
-
-  if (!exists) return redirect(res, "User not found or account not activated.");
-
-  await User.updateOne(
-    { _id: req.user._id },
-    { $set: { isVerified: true } },
-  ).catch((err) => redirect(res, err.message));
-
-  const accessToken = signAccessToken(req.user._id);
-  const refreshToken = signRefreshToken(req.user._id);
-
   try {
+    const userId = new Types.ObjectId(req.user._id);
+
+    const exists = await User.exists({ _id: userId });
+    if (!exists) {
+      redirect(res, "User not found.");
+      return;
+    }
+
+    await User.updateOne({ _id: userId }, { $set: { isVerified: true } });
+
+    const refreshToken = signRefreshToken(userId);
+
     const token = new Token({
-      userId: req.user._id,
+      userId,
       refreshToken,
       status: true,
       expiresIn: Date.now() + 604800000,
@@ -46,12 +48,12 @@ const verifyEmail = async (req, res) => {
       createdByIp: ipHelper(req),
     });
     await token.save();
-  } catch (err) {
-    return redirect(res, err.message);
-  }
 
-  logger("00058", req.user._id, getText("en", "00058"), "Info", req);
-  return redirect(res, null);
+    logger("00058", req.user._id, getText("en", "00058"), "Info", req);
+    redirect(res, null);
+  } catch (err) {
+    redirect(res, (err as Error).message);
+  }
 };
 
 export default verifyEmail;

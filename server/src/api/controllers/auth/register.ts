@@ -1,3 +1,5 @@
+import type { RequestHandler } from "express";
+import { hash } from "bcryptjs";
 import { User } from "../../../models/index.js";
 import { validateRegister } from "../../validators/user.validator.js";
 import {
@@ -9,10 +11,8 @@ import {
   turkishToEnglish,
   signConfirmCodeToken,
 } from "../../../utils/index.js";
-import bcrypt from "bcryptjs";
-const { hash } = bcrypt;
 
-const register = async (req, res, next) => {
+const register: RequestHandler = async (req, res) => {
   try {
     const { error } = validateRegister(req.body);
     if (error) {
@@ -20,53 +20,37 @@ const register = async (req, res, next) => {
       if (error.details[0].message.includes("email")) code = "00026";
       else if (error.details[0].message.includes("password")) code = "00027";
       else if (error.details[0].message.includes("name")) code = "00028";
-
-      return res
-        .status(401)
-        .json(errorHelper(code, req, error.details[0].message));
+      res.status(400).json(errorHelper(code, req, error.details[0].message));
+      return;
     }
 
-    const exists = await User.exists({ email: req.body.email }).catch((err) => {
-      return res.status(500).json(errorHelper("00031", req, err.message));
-    });
-
-    if (exists) return res.status(409).json(errorHelper("00032", req));
+    const exists = await User.exists({ email: req.body.email });
+    if (exists) {
+      res.status(409).json(errorHelper("00032", req));
+      return;
+    }
 
     const hashed = await hash(req.body.password, 10);
-
     const emailCode = generateRandomCode(4);
+    const name = turkishToEnglish(req.body.name);
 
     let username = "";
-    let tempName = "";
     let existsUsername = true;
-    let name = turkishToEnglish(req.body.name);
-    if (name.includes(" ")) {
-      tempName = name.trim().split(" ").slice(0, 1).join("").toLowerCase();
-    } else {
-      tempName = name.toLowerCase().trim();
-    }
+    const tempName = name.includes(" ")
+      ? name.trim().split(" ")[0].toLowerCase()
+      : name.toLowerCase().trim();
+
     do {
       username = tempName + generateRandomCode(4);
-      existsUsername = await User.exists({ username: username }).catch(
-        (err) => {
-          return res.status(500).json(errorHelper("00033", req, err.message));
-        },
-      );
+      existsUsername = !!(await User.exists({ username }));
     } while (existsUsername);
-
-    const geo = "nope";
 
     const user = new User({
       email: req.body.email,
       password: hashed,
-      name: name,
-      username: username,
-      language: req.body.language,
-      platform: req.body.platform,
+      name,
+      username,
       isVerified: false,
-      countryCode: geo == null ? "US" : geo.country,
-      timezone: req.body.timezone,
-      lastLogin: Date.now(),
     });
 
     const confirmCodeToken = signConfirmCodeToken(user._id, emailCode);
@@ -74,16 +58,18 @@ const register = async (req, res, next) => {
     await user.save();
 
     await sendCodeToEmail(req.body.email, user.name, confirmCodeToken);
-    user.password = null;
-    logger("00035", user._id, getText("en", "00035"), "Info", req);
-    return res.status(200).json({
+
+    const { password: _pw, ...userResponse } = user.toObject();
+
+    logger("00035", user._id.toHexString(), getText("en", "00035"), "Info", req);
+    res.status(200).json({
       resultMessage: { en: getText("en", "00035"), tr: getText("tr", "00035") },
       resultCode: "00035",
-      user,
+      user: userResponse,
       confirmToken: confirmCodeToken,
     });
-  } catch (error) {
-    return next(error);
+  } catch (err) {
+    res.status(500).json(errorHelper("00008", req, (err as Error).message));
   }
 };
 
@@ -107,16 +93,6 @@ export default register;
  *                password:
  *                  type: string
  *                name:
- *                  type: string
- *                language:
- *                  type: string
- *                  enum: ['tr', 'en']
- *                platform:
- *                  type: string
- *                  enum: ['Android', 'IOS']
- *                timezone:
- *                  type: number
- *                deviceId:
  *                  type: string
  *      tags:
  *        - Auth
