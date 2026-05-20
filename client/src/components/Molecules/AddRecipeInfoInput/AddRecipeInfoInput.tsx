@@ -15,6 +15,21 @@ interface AddRecipeInfoInputProps {
 
 const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) => String(10 + i * 5));
 
+function getInitialValue(idName: string, isCategory: boolean, isTime: boolean): string {
+  const stored = localStorage.getItem("recipeInfo");
+  if (!stored) {
+    if (isCategory) return "Breakfast";
+    if (isTime) return "60";
+    return "";
+  }
+  const recipeInfo = JSON.parse(stored);
+  if (idName === "recipeName" && recipeInfo.title) return recipeInfo.title;
+  if (idName === "recipeAbout" && recipeInfo.description) return recipeInfo.description;
+  if (isCategory && recipeInfo.category) return recipeInfo.category;
+  if (isTime && recipeInfo.time) return recipeInfo.time;
+  return "";
+}
+
 const AddRecipeInfoInput = ({
   placeholder,
   idName,
@@ -27,19 +42,7 @@ const AddRecipeInfoInput = ({
   const { isDark } = useDarkMode();
 
   useEffect(() => {
-    const stored = localStorage.getItem("recipeInfo");
-    if (stored) {
-      const recipeInfo = JSON.parse(stored);
-      if (idName === "recipeName" && recipeInfo.title)
-        setValue(recipeInfo.title);
-      if (idName === "recipeAbout" && recipeInfo.description)
-        setValue(recipeInfo.description);
-      if (isCategory && recipeInfo.category) setValue(recipeInfo.category);
-      if (isTime && recipeInfo.time) setValue(recipeInfo.time);
-    } else {
-      if (isCategory) setValue("Breakfast");
-      if (isTime) setValue("60");
-    }
+    setValue(getInitialValue(idName, isCategory, isTime));
   });
 
   const handleCloseDropdown = (event: Event) => {
@@ -57,11 +60,11 @@ const AddRecipeInfoInput = ({
     }, 100);
   };
 
-  const changeValue = (event: MouseEvent<HTMLLIElement>) => {
+  const changeValue = (event: MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
     const newValue = target.dataset.value ?? "";
     const stored = localStorage.getItem("recipeInfo");
-    if (stored && (isCategory || isTime)) {
+    if (stored) {
       const recipeInfo = JSON.parse(stored);
       if (isCategory) recipeInfo.category = newValue;
       if (isTime) recipeInfo.time = newValue;
