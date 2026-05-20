@@ -10,7 +10,9 @@ const AddIngredients = () => {
 
   function checkLocalStorage() {
     if (localStorage.getItem("recipeInfo")) {
-      const recipe = JSON.parse(localStorage.getItem("recipeInfo")!) as { ingredients?: unknown[] };
+      const recipe = JSON.parse(localStorage.getItem("recipeInfo")) as {
+        ingredients?: unknown[];
+      };
       createArray(recipe?.ingredients?.length ?? 0);
       return;
     }
@@ -29,7 +31,9 @@ const AddIngredients = () => {
     if (counter.length > 1) {
       const copyArray = counter.slice(0, -1);
       setCounter(copyArray);
-      const recipe = JSON.parse(localStorage.getItem("recipeInfo")!) as { ingredients: unknown[] };
+      const recipe = JSON.parse(localStorage.getItem("recipeInfo")) as {
+        ingredients: unknown[];
+      };
       recipe.ingredients = recipe.ingredients.slice(0, -1);
       localStorage.setItem("recipeInfo", JSON.stringify(recipe));
     }
@@ -39,18 +43,25 @@ const AddIngredients = () => {
     const copyArray = [...counter];
     copyArray.push(copyArray[copyArray.length - 1] + 1);
     setCounter(copyArray);
-    const recipe = JSON.parse(localStorage.getItem("recipeInfo")!) as { ingredients: Array<{ id: null; measure: string }> };
+    const recipe = JSON.parse(localStorage.getItem("recipeInfo")) as {
+      ingredients: Array<{ id: null; measure: string }>;
+    };
     recipe.ingredients.push({ id: null, measure: "0 g" });
     localStorage.setItem("recipeInfo", JSON.stringify(recipe));
   };
 
   const handleClose = (event: MouseEvent<HTMLButtonElement>) => {
-    const value = (event.target as HTMLElement).closest("button")?.dataset.counter;
+    const value = (event.target as HTMLElement).closest("button")?.dataset
+      .counter;
     if (counter.length > 1) {
       const copyArray = counter.filter((item) => item !== Number(value));
       setCounter(copyArray);
-      const recipe = JSON.parse(localStorage.getItem("recipeInfo")!) as { ingredients: unknown[] };
-      recipe.ingredients = recipe.ingredients.filter((_, index) => index !== Number(value) - 1);
+      const recipe = JSON.parse(localStorage.getItem("recipeInfo")) as {
+        ingredients: unknown[];
+      };
+      recipe.ingredients = recipe.ingredients.filter(
+        (_, index) => index !== Number(value) - 1,
+      );
       localStorage.setItem("recipeInfo", JSON.stringify(recipe));
     }
   };
@@ -77,8 +88,12 @@ const AddIngredients = () => {
           {counter.map(
             (item) =>
               item !== 0 && (
-                <AddIngredientsItem key={item} id={item} onClose={handleClose} />
-              )
+                <AddIngredientsItem
+                  key={item}
+                  id={item}
+                  onClose={handleClose}
+                />
+              ),
           )}
         </ul>
       </div>

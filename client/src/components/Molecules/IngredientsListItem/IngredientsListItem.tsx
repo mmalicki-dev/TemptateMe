@@ -1,10 +1,13 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
-import { addProduct, deleteProduct } from "../../../redux/shopping/operations.ts";
+import {
+  addProduct,
+  deleteProduct,
+} from "../../../redux/shopping/operations.ts";
 import { useRecipes } from "../../../hooks/index.ts";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
-import type { Ingredient, Recipe } from "../../../types/index.ts";
+import type { Ingredient } from "../../../types/index.ts";
 import type { AppDispatch } from "../../../redux/store.ts";
 import styles from "./IngredientsListItem.module.css";
 
@@ -23,7 +26,7 @@ const IngredientsListItem = ({
   const { recipes } = useRecipes();
   const [check, setCheck] = useState(isChecked);
   const { isDark } = useDarkMode();
-  const recipe = recipes[0] as Recipe | undefined;
+  const recipe = recipes[0];
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -44,10 +47,16 @@ const IngredientsListItem = ({
 
   return ingredient ? (
     <li
-      className={[styles.IngredientsListItem, isDark && styles.isDark].join(" ")}
+      className={[styles.IngredientsListItem, isDark && styles.isDark].join(
+        " ",
+      )}
     >
       <div className={styles.name}>
-        <img alt={ingredient.ttl} src={ingredient.thb} className={styles.image} />
+        <img
+          alt={ingredient.ttl}
+          src={ingredient.thb}
+          className={styles.image}
+        />
         <span>{ingredient.ttl}</span>
       </div>
       <div className={styles.numberList}>

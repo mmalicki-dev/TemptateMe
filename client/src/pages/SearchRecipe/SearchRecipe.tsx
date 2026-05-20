@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import styles from "./SearchRecipe.module.css";
 import {
   fetchPopularRecipes,
@@ -27,7 +27,7 @@ const SearchRecipePage = () => {
     value ? setText(value) : setText("");
   };
 
-  const onClick = (event: FormEvent) => {
+  const onClick = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setQuery(text);
     dispatch(updatePage(0));
@@ -53,7 +53,6 @@ const SearchRecipePage = () => {
         buttonText="Search"
         placeholderText="Enter query"
         onChange={onChange}
-        onClick={onClick}
         onSubmit={onClick}
       />
       {recipes.length > 0 ? (

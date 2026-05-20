@@ -2,10 +2,11 @@ import { AddIngredientName } from "../../Atoms/AddIngredientName/AddIngredientNa
 import { AddIngredientUnit } from "../../Atoms/AddIngredientUnit/AddIngredientUnit.tsx";
 import { AddIngredientCloseButton } from "../../Atoms/AddIngredientCloseButton/AddIngredientCloseButton.tsx";
 import styles from "./AddIngredientsItem.module.css";
+import { MouseEvent } from "react";
 
 interface AddIngredientsItemProps {
   id: number;
-  onClose: () => void;
+  onClose: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const AddIngredientsItem = ({ id, onClose }: AddIngredientsItemProps) => {

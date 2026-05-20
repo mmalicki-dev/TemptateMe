@@ -55,8 +55,9 @@ function App() {
   const { isDark } = useDarkMode();
 
   useEffect(() => {
-    error &&
-      Notify.failure((error as any)?.resultMessage?.en || "Something went wrong...");
+    if (!error) return;
+    const message = error instanceof Error ? error.message : "Something went wrong...";
+    Notify.failure(message);
   }, [error]);
 
   useEffect(() => {

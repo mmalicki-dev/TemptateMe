@@ -7,7 +7,10 @@ const PopularList = () => {
   return Array.isArray(recipes) ? (
     <ul className={styles.AddPopularList}>
       {recipes.map((recipe, index) => (
-        <PopularListItem key={index} recipe={recipe} />
+        <PopularListItem
+          key={Math.floor(Math.random() * 100) + 1}
+          recipe={recipe}
+        />
       ))}
     </ul>
   ) : null;

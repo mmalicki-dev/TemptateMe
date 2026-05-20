@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import type { MouseEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { fetchRecipesByCategory, updatePage } from "../../../redux/recipes/operations.ts";
+import {
+  fetchRecipesByCategory,
+  updatePage,
+} from "../../../redux/recipes/operations.ts";
 import { useCategories, useRecipes } from "../../../hooks/index.ts";
 import type { AppDispatch } from "../../../redux/store.ts";
 import styles from "./CategoriesList.module.css";
@@ -35,14 +38,17 @@ const CategoriesList = () => {
   return (
     <ul className={styles.CategoriesList}>
       {categoriesTitles.map((item, index) => (
-        <li key={index} className={styles.listItem}>
-          <span
+        <li
+          key={Math.floor(Math.random() * 100) + 1}
+          className={styles.listItem}
+        >
+          <button
             className={category === item ? styles.marked : ""}
             onClick={onClick}
             id={item}
           >
             {item}
-          </span>
+          </button>
         </li>
       ))}
     </ul>

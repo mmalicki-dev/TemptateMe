@@ -1,6 +1,10 @@
 import styles from "./IngredientsList.module.css";
 import { IngredientsListItem } from "../../Molecules/IngredientsListItem/IngredientsListItem.tsx";
-import { useIngredients, useRecipes, useShopping } from "../../../hooks/index.ts";
+import {
+  useIngredients,
+  useRecipes,
+  useShopping,
+} from "../../../hooks/index.ts";
 import type { RecipeIngredient } from "../../../types/index.ts";
 
 interface IngredientsListProps {
@@ -17,7 +21,7 @@ const IngredientsList = ({ ingredientsList }: IngredientsListProps) => {
     return (
       shoppingList
         .filter((item) => item.recipeId === recipe._id)
-        .filter((item) => item.ingredientId === ingredientId).length > 0
+        .map((item) => item.ingredientId === ingredientId).length > 0
     );
   };
 
@@ -35,7 +39,7 @@ const IngredientsList = ({ ingredientsList }: IngredientsListProps) => {
           {ingredientsList.map((item) => (
             <IngredientsListItem
               key={item.id}
-              ingredient={ingredients.filter((ing) => ing._id === item.id)[0]}
+              ingredient={ingredients.find((ing) => ing._id === item.id)}
               measure={item.measure}
               isChecked={isChecked(item.id)}
             />

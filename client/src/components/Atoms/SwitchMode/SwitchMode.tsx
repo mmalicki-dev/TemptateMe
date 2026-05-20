@@ -14,7 +14,7 @@ const SwitchMode = () => {
   }, []);
 
   return (
-    <label className={styles.SwitchMode}>
+    <div className={styles.SwitchMode}>
       <input
         type="checkbox"
         className={styles.input}
@@ -22,7 +22,7 @@ const SwitchMode = () => {
         onChange={setDarkMode}
       />
       <span className={styles.slider}></span>
-    </label>
+    </div>
   );
 };
 

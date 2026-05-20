@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.tsx";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
 import styles from "./CurvedInput.module.css";
@@ -9,7 +9,7 @@ interface CurvedInputProps {
   greenOrBlack?: "green" | "black";
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onClick?: () => void;
-  onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (event: SubmitEvent<HTMLFormElement>) => void;
 }
 
 const CurvedInput = ({
@@ -30,7 +30,11 @@ const CurvedInput = ({
         placeholder={placeholderText}
         onChange={onChange}
       />
-      <CurvedButton title={buttonText} greenOrBlack={greenOrBlack} onClick={onClick} />
+      <CurvedButton
+        title={buttonText}
+        greenOrBlack={greenOrBlack}
+        onClick={onClick}
+      />
     </form>
   );
 };

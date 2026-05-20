@@ -14,18 +14,19 @@ const RecipesList = () => {
     dispatch(fetchRecipeById(id));
   };
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  if (isLoading) return <Loader />;
+  return (
     Array.isArray(recipes) && (
       <ul className={styles.RecipesList}>
         {recipes.map((recipe) => (
-          <li
-            onClick={() => onClick(recipe._id)}
-            key={recipe._id}
-            className={styles.RecipesListItem}
-          >
-            <SearchItem id={recipe._id} title={recipe.title} imgSrc={recipe.thumb} />
+          <li key={recipe._id} className={styles.RecipesListItem}>
+            <button onClick={() => onClick(recipe._id)}>
+              <SearchItem
+                id={recipe._id}
+                title={recipe.title}
+                imgSrc={recipe.thumb}
+              />
+            </button>
           </li>
         ))}
       </ul>

@@ -35,12 +35,12 @@ const MyRecipesListItem = ({
     >
       <img alt="Delicious recipe" src={recipe.thumb} className={styles.image} />
       <div className={styles.info}>
-        <div
+        <button
           onClick={onRemove}
           className={[styles.trash, isFavorites && styles.favorites].join(" ")}
         >
           <TrashIcon />
-        </div>
+        </button>
         <p className={styles.title}>{recipe.title}</p>
         <span className={styles.description}>{recipe.description}</span>
         <div className={styles.timeButton}>
@@ -48,7 +48,9 @@ const MyRecipesListItem = ({
           <Link to={`/recipe/${recipe._id}`} className={styles.button}>
             <CurvedButton
               size="small"
-              greenOrBlack={isDark ? "green" : isFavorites ? "black" : "green"}
+              greenOrBlack={
+                ((isDark && "green") ?? isFavorites) ? "black" : "green"
+              }
               onClick={() => dispatch(fetchRecipeById(recipe._id))}
             >
               See recipe

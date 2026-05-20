@@ -9,9 +9,9 @@ const UserInfo = ({ onClick }: UserInfoProps) => {
   const { user } = useAuth();
   return (
     <div className={styles.UserInfo}>
-      <div className={styles.UserImage} onClick={onClick}>
+      <button className={styles.UserImage} onClick={onClick}>
         <img className={styles.image} alt="User avatar" src={user?.photoUrl} />
-      </div>
+      </button>
       <span className={styles.UserName}>{user?.name}</span>
     </div>
   );

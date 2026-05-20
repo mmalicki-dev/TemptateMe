@@ -8,9 +8,10 @@ const ShoppingList = () => {
   const { shoppingList, isLoading } = useShopping();
   const { ingredients } = useIngredients();
 
-  return isLoading ? (
-    <Loader />
-  ) : shoppingList.length > 0 ? (
+  if (isLoading) return <Loader />;
+  if (shoppingList.length <= 0) return <NotFound title="Your cart is empty!" />;
+
+  return (
     <>
       <div className={styles.head}>
         <span>Product</span>
@@ -25,16 +26,15 @@ const ShoppingList = () => {
             <ShoppingListItem
               key={item._id}
               id={item._id}
-              listItem={ingredients.filter((ing) => ing._id === item.ingredientId)[0]}
+              listItem={ingredients.find(
+                (ing) => ing._id === item.ingredientId,
+              )}
               measure={item.measure}
-              recipeId={item.recipeId}
             />
           ))}
         </ul>
       )}
     </>
-  ) : (
-    <NotFound title="Your cart is empty!" />
   );
 };
 

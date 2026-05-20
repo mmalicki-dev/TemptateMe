@@ -11,18 +11,21 @@ interface MyRecipesListProps {
 const MyRecipesList = ({ isFavorites = false }: MyRecipesListProps) => {
   const { recipes, isLoading } = useRecipes();
 
-  return isLoading ? (
-    <Loader />
-  ) : recipes.length > 0 ? (
+  if (isLoading) return <Loader />;
+  if (recipes.length <= 0) return <NotFound title="There are no recipes." />;
+
+  return (
     Array.isArray(recipes) && (
       <ul className={styles.MyRecipesList}>
         {recipes.map((recipe) => (
-          <MyRecipesListItem key={recipe._id} recipe={recipe} isFavorites={isFavorites} />
+          <MyRecipesListItem
+            key={recipe._id}
+            recipe={recipe}
+            isFavorites={isFavorites}
+          />
         ))}
       </ul>
     )
-  ) : (
-    <NotFound title="There are no recipes." />
   );
 };
 

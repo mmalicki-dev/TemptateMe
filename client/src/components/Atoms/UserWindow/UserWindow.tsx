@@ -37,11 +37,11 @@ const UserWindow = ({ onClose }: UserWindowProps) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      window.addEventListener("click", close);
+      globalThis.addEventListener("click", close);
     }, 100);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("click", close);
+      globalThis.removeEventListener("click", close);
     };
   });
 
@@ -63,12 +63,8 @@ const UserWindow = ({ onClose }: UserWindowProps) => {
           <LogoutIcon />
         </div>
       </CurvedButton>
-      {modalLogout && (
-        <ModalLogout closeModal={() => setModalLogout(false)} />
-      )}
-      {modalEdit && (
-        <ModalEditUser closeModal={() => setModalEdit(false)} />
-      )}
+      {modalLogout && <ModalLogout closeModal={() => setModalLogout(false)} />}
+      {modalEdit && <ModalEditUser closeModal={() => setModalEdit(false)} />}
     </div>
   );
 };

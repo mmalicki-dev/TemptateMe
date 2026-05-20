@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import { RectangleInput } from "../RectangleInput/RectangleInput.tsx";
 import { RectangleButton } from "../../Atoms/RectangleButton/RectangleButton.tsx";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
@@ -7,7 +7,7 @@ import styles from "./Newsletter.module.css";
 const Newsletter = () => {
   const { isDark } = useDarkMode();
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
   };
 
@@ -20,7 +20,10 @@ const Newsletter = () => {
           special offers, etc.
         </p>
       </div>
-      <RectangleInput isEmail={true} placeholderText="Enter your email address" />
+      <RectangleInput
+        isEmail={true}
+        placeholderText="Enter your email address"
+      />
       <RectangleButton
         title="Subscribe"
         type="submit"

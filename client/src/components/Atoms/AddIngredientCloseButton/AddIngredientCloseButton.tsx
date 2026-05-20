@@ -1,9 +1,10 @@
 import { ReactComponent as Icon } from "./iconCloseButton.svg";
 import styles from "./AddIngredientCloseButton.module.css";
+import { MouseEvent } from "react";
 
 interface AddIngredientCloseButtonProps {
   id: number | string;
-  onClick: () => void;
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const AddIngredientCloseButton = ({

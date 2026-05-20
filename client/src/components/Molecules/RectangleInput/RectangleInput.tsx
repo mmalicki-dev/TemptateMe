@@ -16,8 +16,7 @@ interface RectangleInputProps {
 }
 
 const getLabel = (event: ChangeEvent<HTMLInputElement>): HTMLLabelElement =>
-  (event.target as HTMLInputElement & { labels: NodeListOf<HTMLLabelElement> })
-    .labels[0];
+  event.target.labels[0];
 
 const RectangleInput = ({
   isEmail = false,
@@ -46,8 +45,7 @@ const RectangleInput = ({
   const clearState = (label: HTMLLabelElement) => {
     setWarning(false);
     setCorrect(false);
-    label.classList.remove(styles.warning);
-    label.classList.remove(styles.correct);
+    label.classList.remove(styles.warning, styles.correct);
   };
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -94,8 +92,24 @@ const RectangleInput = ({
     setCorrect(false);
   };
 
-  const inputType = isEmail ? "email" : isPassword ? "password" : "text";
-  const inputId = isEmail ? "email" : isPassword ? "password" : "text";
+  let inputType = "text";
+  let inputId = "text";
+  let minLength: number | undefined;
+  let maxLength: number | undefined;
+
+  if (isEmail) {
+    inputType = "email";
+    inputId = "email";
+  }
+  if (isPassword) {
+    inputType = "password";
+    inputId = "password";
+    minLength = 6;
+    maxLength = 20;
+  } else {
+    minLength = 3;
+    maxLength = 30;
+  }
 
   return (
     <label className={styles.RectangleInput}>
@@ -107,8 +121,8 @@ const RectangleInput = ({
       <input
         type={inputType}
         id={inputId}
-        minLength={isPassword ? 6 : isName ? 3 : undefined}
-        maxLength={isPassword ? 20 : isName ? 30 : undefined}
+        minLength={minLength}
+        maxLength={maxLength}
         className={styles.input}
         placeholder={placeholderText}
         onChange={(event) => {

@@ -15,7 +15,11 @@ const PreparationList = ({ preparation, src, alt }: PreparationListProps) => {
         <h3 className={styles.header}>Recipe preparations</h3>
         <ul className={styles.list}>
           {preparation.split("\n").map((step, index) => (
-            <PreparationListItem key={index} stepNumber={index} step={step} />
+            <PreparationListItem
+              key={Math.floor(Math.random() * 100) + 1}
+              stepNumber={index}
+              step={step}
+            />
           ))}
         </ul>
       </div>

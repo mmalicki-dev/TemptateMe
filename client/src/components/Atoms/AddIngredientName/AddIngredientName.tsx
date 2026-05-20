@@ -48,14 +48,14 @@ const AddIngredientName = ({ index }: AddIngredientNameProps) => {
     const target = event.target as HTMLElement;
     if (!target.dataset.scroll) {
       setOpenDropdown(false);
-      window.removeEventListener("click", handleCloseDropdown);
+      globalThis.removeEventListener("click", handleCloseDropdown);
     }
   };
 
   const handleOpenDropdown = (_event: MouseEvent<HTMLButtonElement>) => {
     setOpenDropdown(true);
     setTimeout(() => {
-      window.addEventListener("click", handleCloseDropdown);
+      globalThis.addEventListener("click", handleCloseDropdown);
     }, 100);
   };
 
@@ -68,7 +68,7 @@ const AddIngredientName = ({ index }: AddIngredientNameProps) => {
     if (!openDropdown) setOpenDropdown(true);
     setFilter(event.target.value);
     setValue(event.target.value);
-    window.addEventListener("click", handleCloseDropdown);
+    globalThis.addEventListener("click", handleCloseDropdown);
   };
 
   useEffect(() => {

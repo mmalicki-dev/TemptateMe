@@ -15,12 +15,14 @@ const HomeRecipesList = ({ recipes }: HomeRecipesListProps) => {
   return recipes ? (
     <ul className={styles.HomeRecipesList}>
       {recipes.map((recipe) => (
-        <li
-          className={styles.listItem}
-          key={recipe._id}
-          onClick={() => dispatch(fetchRecipeById(recipe._id))}
-        >
-          <SearchItem id={recipe._id} title={recipe.title} imgSrc={recipe.thumb} />
+        <li className={styles.listItem} key={recipe._id}>
+          <button onClick={() => dispatch(fetchRecipeById(recipe._id))}>
+            <SearchItem
+              id={recipe._id}
+              title={recipe.title}
+              imgSrc={recipe.thumb}
+            />
+          </button>
         </li>
       ))}
     </ul>

@@ -16,12 +16,12 @@ const Pagination = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { isDark } = useDarkMode();
 
-  const onClick = (event: MouseEvent<HTMLUListElement>) => {
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLElement;
     if (target.nodeName === "LI") {
       dispatch(updatePage(Number(target.id)));
       setSearchParams({
-        ...Object.fromEntries([...searchParams]),
+        ...Object.fromEntries(searchParams),
         page: target.id,
       });
     }
@@ -31,7 +31,7 @@ const Pagination = () => {
     const array = [];
     for (let i = 0; i <= count - 1; i++) {
       array.push(
-        <li
+        <div
           id={String(i)}
           key={i}
           className={[
@@ -41,7 +41,7 @@ const Pagination = () => {
           ].join(" ")}
         >
           {i + 1}
-        </li>,
+        </div>,
       );
     }
     return array;
@@ -51,7 +51,7 @@ const Pagination = () => {
     if (page < pageAmount - 1) {
       dispatch(updatePage(page + 1));
       setSearchParams({
-        ...Object.fromEntries([...searchParams]),
+        ...Object.fromEntries(searchParams),
         page: String(page + 1),
       });
     }
@@ -61,7 +61,7 @@ const Pagination = () => {
     if (page > 0) {
       dispatch(updatePage(page - 1));
       setSearchParams({
-        ...Object.fromEntries([...searchParams]),
+        ...Object.fromEntries(searchParams),
         page: String(page - 1),
       });
     }
@@ -77,9 +77,9 @@ const Pagination = () => {
       <button onClick={onSubtract} className={styles.arrows}>
         <IconLeftArrow />
       </button>
-      <ul onClick={onClick} className={styles.list}>
+      <button onClick={onClick} className={styles.list}>
         {listItems(pageAmount)}
-      </ul>
+      </button>
       <button onClick={onAdd} className={styles.arrows}>
         <IconRightArrow />
       </button>

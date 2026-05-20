@@ -13,9 +13,7 @@ interface AddRecipeInfoInputProps {
   isTime?: boolean;
 }
 
-const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) =>
-  String(10 + i * 5),
-);
+const TIME_OPTIONS = Array.from({ length: 38 }, (_, i) => String(10 + i * 5));
 
 const AddRecipeInfoInput = ({
   placeholder,
@@ -32,8 +30,10 @@ const AddRecipeInfoInput = ({
     const stored = localStorage.getItem("recipeInfo");
     if (stored) {
       const recipeInfo = JSON.parse(stored);
-      if (idName === "recipeName" && recipeInfo.title) setValue(recipeInfo.title);
-      if (idName === "recipeAbout" && recipeInfo.description) setValue(recipeInfo.description);
+      if (idName === "recipeName" && recipeInfo.title)
+        setValue(recipeInfo.title);
+      if (idName === "recipeAbout" && recipeInfo.description)
+        setValue(recipeInfo.description);
       if (isCategory && recipeInfo.category) setValue(recipeInfo.category);
       if (isTime && recipeInfo.time) setValue(recipeInfo.time);
     } else {
@@ -46,14 +46,14 @@ const AddRecipeInfoInput = ({
     const target = event.target as HTMLElement;
     if (!target.dataset.scroll) {
       setOpenDropdown(false);
-      window.removeEventListener("click", handleCloseDropdown);
+      globalThis.removeEventListener("click", handleCloseDropdown);
     }
   };
 
   const handleOpenDropdown = () => {
     setOpenDropdown(true);
     setTimeout(() => {
-      window.addEventListener("click", handleCloseDropdown);
+      globalThis.addEventListener("click", handleCloseDropdown);
     }, 100);
   };
 
@@ -82,7 +82,9 @@ const AddRecipeInfoInput = ({
           id={idName}
           className={styles.input}
           type="text"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setValue(e.target.value)
+          }
           value={value}
           data-scroll=""
           required

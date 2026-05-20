@@ -21,14 +21,14 @@ const AddIngredientUnit = ({ index }: AddIngredientUnitProps) => {
     const target = event.target as HTMLElement;
     if (!target.dataset.scroll) {
       setOpenDropdown(false);
-      window.removeEventListener("click", handleCloseDropdown);
+      globalThis.removeEventListener("click", handleCloseDropdown);
     }
   };
 
   const handleOpenDropdown = (_event: MouseEvent<HTMLButtonElement>) => {
     setOpenDropdown(true);
     setTimeout(() => {
-      window.addEventListener("click", handleCloseDropdown);
+      globalThis.addEventListener("click", handleCloseDropdown);
     }, 100);
   };
 
@@ -55,7 +55,8 @@ const AddIngredientUnit = ({ index }: AddIngredientUnitProps) => {
     const stored = localStorage.getItem("recipeInfo");
     if (stored) {
       const { ingredients } = JSON.parse(stored);
-      const measure: string[] = ingredients[index - 1]?.measure?.split(" ") ?? [];
+      const measure: string[] =
+        ingredients[index - 1]?.measure?.split(" ") ?? [];
       setAmount(measure[0]?.length > 0 ? measure[0] : 0);
       setUnit(measure[1]?.length > 0 ? measure[1] : "g");
     }

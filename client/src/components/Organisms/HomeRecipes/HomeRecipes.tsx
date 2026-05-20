@@ -18,11 +18,18 @@ const HomeRecipes = () => {
       <ul className={styles.HomeRecipes}>
         {recipes.map((item) => (
           <li key={item._id} className={styles.listItem}>
-            <span className={[styles.categoryTitle, isDark && styles.isDark].join(" ")}>
+            <span
+              className={[styles.categoryTitle, isDark && styles.isDark].join(
+                " ",
+              )}
+            >
               {item.category}
             </span>
             <HomeRecipesList recipes={(item as any).recipes?.recipes} />
-            <Link className={styles.button} to={`/categories?category=${item.category}`}>
+            <Link
+              className={styles.button}
+              to={`/categories?category=${item.category}`}
+            >
               <RectangleButton title="See all" />
             </Link>
           </li>
@@ -31,7 +38,7 @@ const HomeRecipes = () => {
           <Link to="/categories">
             <CurvedButton
               title="Other categories"
-              greenOrBlack={isDark ? "" : undefined}
+              greenOrBlack={isDark ? "black" : "green"}
               isTransparent={true}
             />
           </Link>

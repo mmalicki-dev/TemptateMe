@@ -14,28 +14,28 @@ const Socials = ({ isBigger = false }: SocialsProps) => {
     <div className={styles.Socials}>
       <SocialIcon
         link="https://www.facebook.com/"
-        className={!isBigger ? styles.fbXS : styles.fbS}
+        className={isBigger ? styles.fbS : styles.fbXS}
         isBigger={isBigger}
       >
         <FacebokIcon />
       </SocialIcon>
       <SocialIcon
         link="https://www.youtube.com/"
-        className={!isBigger ? styles.ytXS : styles.ytS}
+        className={isBigger ? styles.ytS : styles.ytXS}
         isBigger={isBigger}
       >
         <YoutubeIcon />
       </SocialIcon>
       <SocialIcon
         link="https://twitter.com"
-        className={!isBigger ? styles.twitterXS : styles.twitterS}
+        className={isBigger ? styles.twitterS : styles.twitterXS}
         isBigger={isBigger}
       >
         <TwitterIcon />
       </SocialIcon>
       <SocialIcon
         link="https://www.instagram.com/"
-        className={!isBigger ? styles.instaXS : styles.instaS}
+        className={isBigger ? styles.instaS : styles.instaXS}
         isBigger={isBigger}
       >
         <InstagramIcon />

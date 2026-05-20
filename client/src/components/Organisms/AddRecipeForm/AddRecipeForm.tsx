@@ -9,15 +9,15 @@ import styles from "./AddRecipeForm.module.css";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import { Loading } from "notiflix/build/notiflix-loading-aio";
 import type { AppDispatch } from "../../../redux/store.ts";
 
 function dataUrlToFile(dataurl: string, filename = "file"): File {
   const [header, data] = dataurl.split(",");
-  const mime = header.match(/:(.*?);/)![1];
-  const u8arr = Uint8Array.from(atob(data), (c) => c.codePointAt(0)!);
+  const mime = new RegExp(/:(.*?);/).exec(header)[1];
+  const u8arr = Uint8Array.from(atob(data), (c) => c.codePointAt(0));
   return new File([u8arr], filename, { type: mime });
 }
 
@@ -26,9 +26,11 @@ const AddRecipeForm = () => {
   const navigate = useNavigate();
   const { isDark } = useDarkMode();
   const [recipeImage, setRecipeImage] = useState<File | undefined>();
-  const [recipeInfo, setRecipeInfo] = useState<Record<string, unknown> | undefined>();
+  const [recipeInfo, setRecipeInfo] = useState<
+    Record<string, unknown> | undefined
+  >();
 
-  const onChange = (event: FormEvent<HTMLFormElement>) => {
+  const onChange = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget as any;
     const {
@@ -47,7 +49,7 @@ const AddRecipeForm = () => {
     for (let i = 0; i < ingredientNameEls.length; i++) {
       const nameEl = ingredientNameEls[i] as HTMLInputElement;
       const amountEl = ingredientAmountEls[i] as HTMLInputElement;
-      const unitEl = ingredientUnitEls[i] as HTMLElement;
+      const unitEl = ingredientUnitEls[i];
       ingredients.push({
         id: nameEl.dataset.id ?? "",
         measure: [amountEl.value, unitEl.dataset.id].join(" "),
@@ -67,7 +69,7 @@ const AddRecipeForm = () => {
     if (recipeImage.files[0]) setRecipeImage(recipeImage.files[0]);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!recipeImage || !recipeInfo) {
       Notify.failure("Please fill every field including image.");
@@ -75,7 +77,9 @@ const AddRecipeForm = () => {
     }
     try {
       Loading.pulse();
-      const result = await dispatch(addRecipe({ recipeImage, recipeInfo })).unwrap() as any;
+      const result = (await dispatch(
+        addRecipe({ recipeImage, recipeInfo }),
+      ).unwrap()) as any;
       localStorage.removeItem("recipeInfo");
       localStorage.removeItem("recipeImage");
       navigate(`/recipe/${result?.recipes?._id}`);

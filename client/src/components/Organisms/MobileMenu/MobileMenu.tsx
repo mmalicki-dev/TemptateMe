@@ -21,7 +21,7 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
     onClose();
   }
 
-  const handleNav = (event: MouseEvent<HTMLDivElement>) => {
+  const handleNav = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLElement;
     if (target.closest("a")) {
       close();
@@ -29,8 +29,12 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
   };
 
   return (
-    <div
-      className={[styles.MobileMenu, shouldClose && styles.onClose, isDark && styles.isDark].join(" ")}
+    <button
+      className={[
+        styles.MobileMenu,
+        shouldClose && styles.onClose,
+        isDark && styles.isDark,
+      ].join(" ")}
       onClick={handleNav}
       data-container
     >
@@ -48,7 +52,7 @@ const MobileMenu = ({ onClose }: MobileMenuProps) => {
       <div className={styles.darkMode}>
         <SwitchMode />
       </div>
-    </div>
+    </button>
   );
 };
 
