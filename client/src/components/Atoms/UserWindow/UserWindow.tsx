@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { ReactComponent as LogoutIcon } from "./icon-logout.svg";
 import { ReactComponent as EditIcon } from "./icon-edit.svg";
 import { CurvedButton } from "../CurvedButton/CurvedButton.tsx";
-import { ModalLogout } from "../../Organisms/ModalLogout/ModalLogout.jsx";
-import { ModalEditUser } from "../../Organisms/ModalEditUser/ModalEditUser.jsx";
+import { ModalLogout } from "../../Organisms/ModalLogout/ModalLogout.tsx";
+import { ModalEditUser } from "../../Organisms/ModalEditUser/ModalEditUser.tsx";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
 import styles from "./UserWindow.module.css";
 

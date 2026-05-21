@@ -3,7 +3,7 @@ import { UserInfo } from "../../Atoms/UserInfo/UserInfo.tsx";
 import { MenuIcon } from "../../Atoms/MenuIcon/MenuIcon.tsx";
 import { SwitchMode } from "../../Atoms/SwitchMode/SwitchMode.tsx";
 import { UserWindow } from "../../Atoms/UserWindow/UserWindow.tsx";
-import { MobileMenu } from "../../Organisms/MobileMenu/MobileMenu.jsx";
+import { MobileMenu } from "../../Organisms/MobileMenu/MobileMenu.tsx";
 import styles from "./UserHeader.module.css";
 
 const UserHeader = () => {
