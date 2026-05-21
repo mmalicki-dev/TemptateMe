@@ -1,46 +1,44 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
-import {
-  addProduct,
-  deleteProduct,
-} from "../../../redux/shopping/operations.ts";
-import { useRecipes } from "../../../hooks/index.ts";
+import { addProduct, deleteProduct } from "../../../redux/shopping/operations.ts";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
 import type { Ingredient } from "../../../types/index.ts";
 import type { AppDispatch } from "../../../redux/store.ts";
 import styles from "./IngredientsListItem.module.css";
 
 interface IngredientsListItemProps {
-  ingredient: Ingredient;
+  ingredient: Ingredient | undefined;
   measure: string;
   isChecked?: boolean;
+  recipeId: string;
+  recipeName: string;
 }
 
 const IngredientsListItem = ({
   ingredient,
   measure,
   isChecked = false,
+  recipeId,
+  recipeName,
 }: IngredientsListItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { recipes } = useRecipes();
   const [check, setCheck] = useState(isChecked);
   const { isDark } = useDarkMode();
-  const recipe = recipes[0];
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       dispatch(
         addProduct({
-          id: ingredient._id,
+          id: ingredient?._id ?? "",
           measure,
-          recipeId: recipe?._id ?? "",
-          recipeName: recipe?.title ?? "",
+          recipeId,
+          recipeName,
         }),
       );
       setCheck(true);
     } else {
-      dispatch(deleteProduct({ id: ingredient._id }));
+      dispatch(deleteProduct({ id: ingredient?._id ?? "" }));
       setCheck(false);
     }
   };

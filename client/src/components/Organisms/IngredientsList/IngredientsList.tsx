@@ -1,29 +1,22 @@
 import styles from "./IngredientsList.module.css";
 import { IngredientsListItem } from "../../Molecules/IngredientsListItem/IngredientsListItem.tsx";
-import {
-  useIngredients,
-  useRecipes,
-  useShopping,
-} from "../../../hooks/index.ts";
+import { useIngredients, useShopping } from "../../../hooks/index.ts";
 import type { RecipeIngredient } from "../../../types/index.ts";
 
 interface IngredientsListProps {
   ingredientsList: RecipeIngredient[];
+  recipeId: string;
+  recipeName: string;
 }
 
-const IngredientsList = ({ ingredientsList }: IngredientsListProps) => {
+const IngredientsList = ({ ingredientsList, recipeId, recipeName }: IngredientsListProps) => {
   const { ingredients } = useIngredients();
   const { shoppingList } = useShopping();
-  const { recipes } = useRecipes();
 
-  const isChecked = (ingredientId: string): boolean => {
-    const recipe = recipes as unknown as { _id: string };
-    return (
-      shoppingList
-        .filter((item) => item.recipeId === recipe._id)
-        .map((item) => item.ingredientId === ingredientId).length > 0
+  const isChecked = (ingredientId: string): boolean =>
+    shoppingList.some(
+      (item) => item.recipeId === recipeId && item.ingredientId === ingredientId,
     );
-  };
 
   return (
     <>
@@ -42,6 +35,8 @@ const IngredientsList = ({ ingredientsList }: IngredientsListProps) => {
               ingredient={ingredients.find((ing) => ing._id === item.id)}
               measure={item.measure}
               isChecked={isChecked(item.id)}
+              recipeId={recipeId}
+              recipeName={recipeName}
             />
           ))}
         </ul>

@@ -6,6 +6,7 @@ import {
   addRecipe,
   deleteRecipe,
   deleteFromFavorites,
+  fetchRecipeById,
   updatePage,
 } from "./operations.ts";
 
@@ -52,6 +53,7 @@ const handleRejected = (
 
 const initialState: RecipesState = {
   items: [],
+  currentRecipe: null,
   pageAmount: 0,
   page: 0,
   isLoading: false,
@@ -64,6 +66,11 @@ const recipesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchRecipeById.fulfilled, (state, action) => {
+        clearLoadingError(state);
+        const payload = action.payload as unknown as { recipe: Recipe };
+        state.currentRecipe = payload.recipe;
+      })
       .addCase(addRecipe.fulfilled, (state, action) => {
         clearLoadingError(state);
         const payload = action.payload as unknown as { recipe: Recipe };

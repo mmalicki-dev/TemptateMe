@@ -4,6 +4,7 @@ import type { RootState } from "../redux/store.ts";
 import type { Recipe } from "../types/index.ts";
 import {
   selectRecipes,
+  selectCurrentRecipe,
   selectRecipesIsLoading,
   selectRecipesPageAmount,
   selectRecipesError,
@@ -15,9 +16,10 @@ const useRecipes = () => {
   const pageAmount = useSelector<RootState, number>(selectRecipesPageAmount);
   const page = useSelector<RootState, number>(selectRecipesPage);
   const recipes = useSelector<RootState, Recipe[]>(selectRecipes);
+  const currentRecipe = useSelector<RootState, Recipe | null>(selectCurrentRecipe);
   const error = useSelector<RootState, unknown>(selectRecipesError);
 
-  return { isLoading, recipes, page, pageAmount, error };
+  return { isLoading, recipes, currentRecipe, page, pageAmount, error };
 };
 
 export default useRecipes;

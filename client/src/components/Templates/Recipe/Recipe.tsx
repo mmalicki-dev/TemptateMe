@@ -5,33 +5,39 @@ import { PreparationList } from "../../Organisms/PreparationList/PreparationList
 import { useRecipes } from "../../../hooks/index.ts";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { fetchRecipeById } from "../../../redux/recipes/operations.ts";
 import { fetchShoppingList } from "../../../redux/shopping/operations.ts";
 import { fetchIngredients } from "../../../redux/ingredients/operations.ts";
 import { Loader } from "../../Atoms/Loader/Loader.tsx";
 import type { AppDispatch } from "../../../redux/store.ts";
-import type { Recipe as RecipeType } from "../../../types/index.ts";
 
 const Recipe = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { recipes, isLoading } = useRecipes();
-  const recipe = recipes as unknown as RecipeType;
+  const { currentRecipe, isLoading } = useRecipes();
+  const { recipeId } = useParams<{ recipeId: string }>();
 
   useEffect(() => {
     dispatch(fetchShoppingList());
     dispatch(fetchIngredients());
-  }, [dispatch]);
+    if (recipeId) dispatch(fetchRecipeById(recipeId));
+  }, [dispatch, recipeId]);
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  if (isLoading || !currentRecipe) return <Loader />;
+
+  return (
     <>
-      <RecipeDetails recipe={recipe} />
+      <RecipeDetails recipe={currentRecipe} />
       <div className={styles.Recipe}>
-        <IngredientsList ingredientsList={recipe.ingredients} />
+        <IngredientsList
+          ingredientsList={currentRecipe.ingredients}
+          recipeId={currentRecipe._id}
+          recipeName={currentRecipe.title}
+        />
         <PreparationList
-          preparation={recipe.instructions}
-          alt={recipe.title}
-          src={recipe.thumb}
+          preparation={currentRecipe.instructions}
+          alt={currentRecipe.title}
+          src={currentRecipe.thumb}
         />
       </div>
     </>

@@ -80,6 +80,7 @@ export interface AuthState {
 
 export interface RecipesState {
   items: Recipe[];
+  currentRecipe: Recipe | null;
   pageAmount: number;
   page: number;
   isLoading: boolean;
