@@ -72,7 +72,7 @@ const Pagination = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageAmount]);
 
-  return pageAmount ? (
+  return pageAmount > 0 ? (
     <div className={[styles.Pagination, isDark && styles.isDark].join(" ")}>
       <button onClick={onSubtract} className={styles.arrows}>
         <IconLeftArrow />
