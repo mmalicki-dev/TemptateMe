@@ -1,8 +1,11 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import multer from "multer";
 import fs from "node:fs";
 
-export const tmpDir = path.join(process.cwd(), "src/tmp/");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Resolves to server/tmp/ regardless of the working directory at launch
+export const tmpDir = path.join(__dirname, "../../../../tmp/");
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
