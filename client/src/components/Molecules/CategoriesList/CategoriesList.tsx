@@ -37,20 +37,23 @@ const CategoriesList = () => {
 
   return (
     <ul className={styles.CategoriesList}>
-      {categoriesTitles.map((item, index) => (
-        <li
-          key={Math.floor(Math.random() * 100) + 1}
-          className={styles.listItem}
-        >
-          <button
-            className={category === item ? styles.marked : ""}
-            onClick={onClick}
-            id={item}
+      {categoriesTitles.map((item) => {
+        console.log(item);
+        return (
+          <li
+            key={Math.floor(Math.random() * 100) + 1}
+            className={styles.listItem}
           >
-            {item}
-          </button>
-        </li>
-      ))}
+            <button
+              className={category === item ? styles.marked : ""}
+              onClick={onClick}
+              id={item}
+            >
+              {item}
+            </button>
+          </li>
+        );
+      })}
     </ul>
   );
 };
