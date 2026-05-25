@@ -10,7 +10,7 @@ import { ErrorBoundary } from "./components/Atoms/ErrorBoundary/ErrorBoundary.ts
 import { store, persistor } from "./redux/store.ts";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ErrorBoundary>
       <HelmetProvider>
@@ -25,5 +25,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </Provider>
       </HelmetProvider>
     </ErrorBoundary>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
