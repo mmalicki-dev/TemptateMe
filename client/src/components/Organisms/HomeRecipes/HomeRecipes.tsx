@@ -25,7 +25,7 @@ const HomeRecipes = () => {
             >
               {item.category}
             </span>
-            <HomeRecipesList recipes={(item as any).recipes?.recipes} />
+            <HomeRecipesList recipes={(item as any).recipes} />
             <Link
               className={styles.button}
               to={`/categories?category=${item.category}`}

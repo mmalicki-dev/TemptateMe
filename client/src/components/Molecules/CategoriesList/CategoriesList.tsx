@@ -17,8 +17,8 @@ const CategoriesList = () => {
   const { categoriesTitles } = useCategories();
   const { page } = useRecipes();
 
-  const onClick = (event: MouseEvent<HTMLSpanElement>) => {
-    const id = (event.target as HTMLElement).id;
+  const onClick = (event: MouseEvent<HTMLButtonElement>) => {
+    const id = event.currentTarget.id;
     dispatch(updatePage(0));
     if (categoriesTitles.includes(id)) {
       setCategory(id);
@@ -38,10 +38,9 @@ const CategoriesList = () => {
   return (
     <ul className={styles.CategoriesList}>
       {categoriesTitles.map((item) => {
-        console.log(item);
         return (
           <li
-            key={Math.floor(Math.random() * 100) + 1}
+            key={item}
             className={styles.listItem}
           >
             <button

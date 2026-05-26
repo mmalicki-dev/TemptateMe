@@ -4,6 +4,7 @@ import type { UnknownAction, PayloadAction } from "@reduxjs/toolkit";
 import type { RecipesState, Recipe } from "../../types/index.ts";
 import {
   addRecipe,
+  addToFavorites,
   deleteRecipe,
   deleteFromFavorites,
   fetchRecipeById,
@@ -37,9 +38,10 @@ const handleFulfilled = (
   action: PayloadAction<unknown>,
 ): void => {
   clearLoadingError(state);
+  if (!action.payload) return;
   const payload = action.payload as { recipes?: Recipe[]; pageAmount?: number };
   if (payload.recipes) state.items = payload.recipes;
-  if (payload.pageAmount) state.pageAmount = payload.pageAmount;
+  if (payload.pageAmount !== undefined) state.pageAmount = payload.pageAmount;
 };
 
 const handleRejected = (
@@ -84,6 +86,9 @@ const recipesSlice = createSlice({
         const { recipeId } = action.payload as unknown as { recipeId: string };
         const index = state.items.findIndex((r) => r._id === recipeId);
         if (index !== -1) state.items.splice(index, 1);
+      })
+      .addCase(addToFavorites.fulfilled, (state) => {
+        clearLoadingError(state);
       })
       .addCase(deleteFromFavorites.fulfilled, (state, action) => {
         clearLoadingError(state);

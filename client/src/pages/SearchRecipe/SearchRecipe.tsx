@@ -31,7 +31,6 @@ const SearchRecipePage = () => {
     event.preventDefault();
     setQuery(text);
     dispatch(updatePage(0));
-    dispatch(fetchRecipesByQuery({ query, page }));
   };
 
   useEffect(() => {
