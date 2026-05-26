@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styles from "./ShoppingList.module.css";
 import { ShoppingListItem } from "../../Molecules/ShoppingListItem/ShoppingListItem.tsx";
 import { useIngredients, useShopping } from "../../../hooks/index.ts";
@@ -9,15 +10,15 @@ const ShoppingList = () => {
   const { shoppingList, isLoading } = useShopping();
   const { ingredients } = useIngredients();
 
-  if (isLoading) return <Loader />;
-  if (shoppingList.length <= 0) return <NotFound title="Your cart is empty!" />;
-
-  const groups = shoppingList.reduce<Record<string, ShoppingItem[]>>((acc, item) => {
+  const groups = useMemo(() => shoppingList.reduce<Record<string, ShoppingItem[]>>((acc, item) => {
     const key = item.recipeName ?? "Other";
     if (!acc[key]) acc[key] = [];
     acc[key].push(item);
     return acc;
-  }, {});
+  }, {}), [shoppingList]);
+
+  if (isLoading) return <Loader />;
+  if (shoppingList.length <= 0) return <NotFound title="Your cart is empty!" />;
 
   return (
     <>

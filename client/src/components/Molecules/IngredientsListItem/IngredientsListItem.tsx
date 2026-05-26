@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useCallback } from "react";
 import type { ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { addProduct, deleteProduct } from "../../../redux/shopping/operations.ts";
@@ -15,7 +15,7 @@ interface IngredientsListItemProps {
   recipeName: string;
 }
 
-const IngredientsListItem = ({
+const IngredientsListItem = memo(({
   ingredient,
   measure,
   isChecked = false,
@@ -23,25 +23,15 @@ const IngredientsListItem = ({
   recipeName,
 }: IngredientsListItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [check, setCheck] = useState(isChecked);
   const { isDark } = useDarkMode();
 
-  const onChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      dispatch(
-        addProduct({
-          id: ingredient?._id ?? "",
-          measure,
-          recipeId,
-          recipeName,
-        }),
-      );
-      setCheck(true);
+      dispatch(addProduct({ id: ingredient?._id ?? "", measure, recipeId, recipeName }));
     } else {
       dispatch(deleteProduct({ id: ingredient?._id ?? "" }));
-      setCheck(false);
     }
-  };
+  }, [dispatch, ingredient?._id, measure, recipeId, recipeName]);
 
   return ingredient ? (
     <li
@@ -61,13 +51,13 @@ const IngredientsListItem = ({
         <div className={styles.measure}>{measure}</div>
         <input
           type="checkbox"
-          checked={check}
+          checked={isChecked}
           className={styles.list}
           onChange={onChange}
         />
       </div>
     </li>
   ) : null;
-};
+});
 
 export { IngredientsListItem };

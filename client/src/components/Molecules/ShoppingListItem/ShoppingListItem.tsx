@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "../../../redux/shopping/operations.ts";
 import type { Ingredient } from "../../../types/index.ts";
@@ -6,12 +7,16 @@ import styles from "./ShoppingListItem.module.css";
 
 interface ShoppingListItemProps {
   id: string;
-  listItem: Ingredient;
+  listItem: Ingredient | undefined;
   measure: string;
 }
 
-const ShoppingListItem = ({ id, listItem, measure }: ShoppingListItemProps) => {
+const ShoppingListItem = memo(({ id, listItem, measure }: ShoppingListItemProps) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const handleDelete = useCallback(() => {
+    dispatch(deleteProduct({ id }));
+  }, [dispatch, id]);
 
   return listItem ? (
     <li className={styles.ShoppingListItem}>
@@ -21,16 +26,12 @@ const ShoppingListItem = ({ id, listItem, measure }: ShoppingListItemProps) => {
       </div>
       <div className={styles.numberList}>
         <div className={styles.measure}>{measure}</div>
-        <button
-          type="button"
-          onClick={() => dispatch(deleteProduct({ id }))}
-          className={styles.list}
-        >
+        <button type="button" onClick={handleDelete} className={styles.list}>
           X
         </button>
       </div>
     </li>
   ) : null;
-};
+});
 
 export { ShoppingListItem };

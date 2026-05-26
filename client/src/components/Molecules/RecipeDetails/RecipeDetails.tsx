@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { ReactComponent as IconClock } from "./icon-clock.svg";
 import { CurvedButton } from "../../Atoms/CurvedButton/CurvedButton.tsx";
@@ -17,7 +18,7 @@ const RecipeDetails = ({ recipe }: RecipeDetailsProps) => {
 
   const isFavorite = user ? recipe.favorites.includes(user._id) : false;
 
-  const handleFavoriteToggle = async () => {
+  const handleFavoriteToggle = useCallback(async () => {
     const action = isFavorite ? deleteFromFavorites(recipe._id) : addToFavorites(recipe._id);
     try {
       await dispatch(action).unwrap();
@@ -25,7 +26,7 @@ const RecipeDetails = ({ recipe }: RecipeDetailsProps) => {
       // ignore toggle errors, re-fetch regardless
     }
     dispatch(fetchRecipeById(recipe._id));
-  };
+  }, [dispatch, isFavorite, recipe._id]);
 
   return (
     <div className={styles.RecipeDetails}>
