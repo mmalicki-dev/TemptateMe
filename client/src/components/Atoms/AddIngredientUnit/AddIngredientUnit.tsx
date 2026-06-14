@@ -41,7 +41,10 @@ const AddIngredientUnit = ({ index }: AddIngredientUnitProps) => {
   }
 
   const changeAmount = (event: ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
+    const value = event.target.value;
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setAmount(value);
+    }
   };
 
   const changeUnit = (event: MouseEvent<HTMLLIElement>) => {
@@ -64,7 +67,8 @@ const AddIngredientUnit = ({ index }: AddIngredientUnitProps) => {
 
   useEffect(() => {
     checkLocalStorage();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <label
@@ -74,6 +78,7 @@ const AddIngredientUnit = ({ index }: AddIngredientUnitProps) => {
         name="ingredientAmount"
         className={styles.inputAmount}
         type="text"
+        inputMode="decimal"
         autoComplete="off"
         value={amount}
         onChange={changeAmount}

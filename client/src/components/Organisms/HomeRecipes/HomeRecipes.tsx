@@ -17,7 +17,7 @@ const HomeRecipes = () => {
     Array.isArray(recipes) && (
       <ul className={styles.HomeRecipes}>
         {recipes.map((item) => (
-          <li key={item._id} className={styles.listItem}>
+          <li key={item.category} className={styles.listItem}>
             <span
               className={[styles.categoryTitle, isDark && styles.isDark].join(
                 " ",
@@ -34,7 +34,7 @@ const HomeRecipes = () => {
             </Link>
           </li>
         ))}
-        <li className={styles.otherButton}>
+        <li key="other-categories" className={styles.otherButton}>
           <Link to="/categories">
             <CurvedButton
               title="Other categories"
