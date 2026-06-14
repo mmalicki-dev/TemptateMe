@@ -54,3 +54,7 @@ p {
   margin: 0;
   padding: 0;
 }
+
+[class*="notiflix"] {
+  font-family: var(--font-family) !important;
+}
