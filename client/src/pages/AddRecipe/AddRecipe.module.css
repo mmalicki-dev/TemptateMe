@@ -25,6 +25,13 @@
   gap: 100px;
 }
 
+.demoNotice {
+  margin-top: 40px;
+  text-align: center;
+  color: var(--popularDescriptionText);
+  font-size: 16px;
+}
+
 @media screen and (min-width: 768px) {
   .AddRecipe {
     /* width: 704px; */

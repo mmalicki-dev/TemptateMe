@@ -7,6 +7,7 @@ interface CurvedButtonProps {
   greenOrBlack?: "green" | "black";
   size?: "big" | "small";
   isTransparent?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
   children?: ReactNode;
 }
@@ -17,6 +18,7 @@ const CurvedButton = ({
   greenOrBlack,
   size = "big",
   isTransparent = false,
+  disabled = false,
   onClick = () => {},
   children,
 }: CurvedButtonProps) => {
@@ -24,7 +26,7 @@ const CurvedButton = ({
     styles[size]
   } ${isTransparent ? styles.transparent : ""}`;
   return (
-    <button className={classes} type={type} onClick={onClick}>
+    <button className={classes} type={type} onClick={onClick} disabled={disabled}>
       {title}
       {children}
     </button>

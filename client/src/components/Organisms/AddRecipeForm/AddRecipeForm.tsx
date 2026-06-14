@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { addRecipe } from "../../../redux/recipes/operations.ts";
 import styles from "./AddRecipeForm.module.css";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
+import { useDemoMode } from "../../../hooks/index.ts";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
@@ -25,6 +26,7 @@ const AddRecipeForm = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { isDark } = useDarkMode();
+  const isDemo = useDemoMode();
   const [recipeImage, setRecipeImage] = useState<File | undefined>();
   const [recipeInfo, setRecipeInfo] = useState<
     Record<string, unknown> | undefined
@@ -71,6 +73,7 @@ const AddRecipeForm = () => {
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isDemo) return;
     if (!recipeImage || !recipeInfo) {
       Notify.failure("Please fill every field including image.");
       return;
@@ -133,6 +136,7 @@ const AddRecipeForm = () => {
           greenOrBlack={isDark ? "green" : "black"}
           type="submit"
           title="Add recipe"
+          disabled={isDemo}
         />
       </div>
       <button className={styles.reset} type="button" onClick={handleReset}>

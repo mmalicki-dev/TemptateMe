@@ -118,3 +118,14 @@
   cursor: pointer;
   padding: 10px 0;
 }
+
+.delete:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.demoNotice {
+  font-size: 12px;
+  color: var(--popularDescriptionText);
+  text-align: center;
+}

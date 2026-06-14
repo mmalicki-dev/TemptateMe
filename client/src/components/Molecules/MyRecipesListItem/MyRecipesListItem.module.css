@@ -45,6 +45,11 @@
   transition: transform 0.5s;
 }
 
+.trash:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .trash:hover,
 .trash:active {
   transition: transform 0.5s;

@@ -4,3 +4,4 @@ export { default as useIngredients } from "./useIngredients.ts";
 export { default as useRecipes } from "./useRecipes.ts";
 export { default as useShopping } from "./useShopping.ts";
 export { default as useWindowDimensions } from "./useWindowDimentions.ts";
+export { default as useDemoMode } from "./useDemoMode.ts";

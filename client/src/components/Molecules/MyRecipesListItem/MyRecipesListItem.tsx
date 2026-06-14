@@ -8,6 +8,7 @@ import {
   deleteRecipe,
 } from "../../../redux/recipes/operations.ts";
 import { useDarkMode } from "../../../context/DarkModeContext.tsx";
+import { useDemoMode } from "../../../hooks/index.ts";
 import type { Recipe } from "../../../types/index.ts";
 import type { AppDispatch } from "../../../redux/store.ts";
 import styles from "./MyRecipesListItem.module.css";
@@ -22,9 +23,11 @@ const MyRecipesListItem = ({
   isFavorites = false,
 }: MyRecipesListItemProps) => {
   const { isDark } = useDarkMode();
+  const isDemo = useDemoMode();
   const dispatch = useDispatch<AppDispatch>();
 
   const onRemove = () => {
+    if (isDemo) return;
     if (isFavorites) dispatch(deleteFromFavorites(recipe._id));
     else dispatch(deleteRecipe(recipe._id));
   };
@@ -37,6 +40,7 @@ const MyRecipesListItem = ({
       <div className={styles.info}>
         <button
           onClick={onRemove}
+          disabled={isDemo}
           className={[styles.trash, isFavorites && styles.favorites].join(" ")}
         >
           <TrashIcon />

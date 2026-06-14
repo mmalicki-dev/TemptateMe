@@ -7,7 +7,7 @@ import { Modal } from "../../Templates/Modal/Modal.tsx";
 import { RectangleButton } from "../../Atoms/RectangleButton/RectangleButton.tsx";
 import { useState, useEffect } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
-import { useAuth } from "../../../hooks/index.ts";
+import { useAuth, useDemoMode } from "../../../hooks/index.ts";
 import { useDispatch } from "react-redux";
 import {
   deleteUser,
@@ -24,6 +24,7 @@ interface ModalEditUserProps {
 const ModalEditUser = ({ closeModal }: ModalEditUserProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useAuth();
+  const isDemo = useDemoMode();
   const [file, setFile] = useState<File | undefined>();
   const [name, setName] = useState(user?.name ?? "");
   const [imageUrl, setImageUrl] = useState(user?.photoUrl ?? "");
@@ -50,6 +51,7 @@ const ModalEditUser = ({ closeModal }: ModalEditUserProps) => {
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isDemo) return;
     const imageInput = event.currentTarget.elements.namedItem(
       "image",
     ) as HTMLInputElement;
@@ -62,6 +64,7 @@ const ModalEditUser = ({ closeModal }: ModalEditUserProps) => {
   };
 
   const handleDelete = () => {
+    if (isDemo) return;
     dispatch(deleteUser());
   };
 
@@ -76,6 +79,7 @@ const ModalEditUser = ({ closeModal }: ModalEditUserProps) => {
             id="recipeImage"
             accept="image/png, image/jpg, image/jpeg"
             onChange={onUpload}
+            disabled={isDemo}
           />
           {!imageUrl && (
             <div className={styles.iconUser} data-modal>
@@ -106,14 +110,16 @@ const ModalEditUser = ({ closeModal }: ModalEditUserProps) => {
             id="name"
             value={name}
             onChange={handleName}
+            disabled={isDemo}
           />
           <div className={styles.iconEdit} data-modal>
             <IconEdit />
           </div>
         </div>
-        <RectangleButton title="Save changes" type="submit" />
+        <RectangleButton title="Save changes" type="submit" disabled={isDemo} />
       </form>
-      <button className={styles.delete} onClick={handleDelete}>
+      {isDemo && <p className={styles.demoNotice}>Profile editing is disabled in demo mode.</p>}
+      <button className={styles.delete} onClick={handleDelete} disabled={isDemo}>
         Delete user
       </button>
     </Modal>
