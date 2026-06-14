@@ -37,7 +37,7 @@ React Testing Library
 
 ## Live Demo
 
-[temptateme.netlify.app](https://temptateme.netlify.app)
+[temptateme.mm-tech-dev.no](https://temptateme.mm-tech-dev.no)
 
 Backend hosted on Render *(migrating to VPS)*
 
