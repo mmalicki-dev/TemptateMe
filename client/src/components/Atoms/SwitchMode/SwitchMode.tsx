@@ -14,7 +14,7 @@ const SwitchMode = () => {
   }, []);
 
   return (
-    <div className={styles.SwitchMode}>
+    <label className={styles.SwitchMode} aria-label="Toggle dark mode">
       <input
         type="checkbox"
         className={styles.input}
@@ -22,7 +22,7 @@ const SwitchMode = () => {
         onChange={setDarkMode}
       />
       <span className={styles.slider}></span>
-    </div>
+    </label>
   );
 };
 

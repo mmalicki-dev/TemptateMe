@@ -1,5 +1,9 @@
-.Header {
+.HeaderWrapper {
   width: 100%;
+  border-bottom: 1px solid var(--shoppingListBorder);
+}
+
+.Header {
   max-width: 1024px;
   display: flex;
   flex-wrap: nowrap;

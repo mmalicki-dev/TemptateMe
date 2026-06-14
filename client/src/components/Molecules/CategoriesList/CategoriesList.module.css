@@ -13,15 +13,23 @@
   position: relative;
 }
 
+.button {
+  cursor: pointer;
+  color: inherit;
+}
+
 .marked {
   display: block;
   color: var(--accent);
 }
 
+.isDark {
+  color: var(--primaryColor);
+}
+
 .marked::after {
   content: "";
   position: absolute;
-  width: 100%;
   bottom: -32px;
   left: 0;
   right: 0;

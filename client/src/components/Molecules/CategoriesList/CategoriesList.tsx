@@ -7,6 +7,7 @@ import {
   updatePage,
 } from "../../../redux/recipes/operations.ts";
 import { useCategories, useRecipes } from "../../../hooks/index.ts";
+import { useDarkMode } from "../../../context/DarkModeContext.tsx";
 import type { AppDispatch } from "../../../redux/store.ts";
 import styles from "./CategoriesList.module.css";
 
@@ -16,6 +17,7 @@ const CategoriesList = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { categoriesTitles } = useCategories();
   const { page } = useRecipes();
+  const { isDark } = useDarkMode();
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     const id = event.currentTarget.id;
@@ -36,15 +38,16 @@ const CategoriesList = () => {
   }, [category, page, dispatch]);
 
   return (
-    <ul className={styles.CategoriesList}>
+    <ul
+      className={[styles.CategoriesList, isDark && styles.isDark]
+        .filter(Boolean)
+        .join(" ")}
+    >
       {categoriesTitles.map((item) => {
         return (
-          <li
-            key={item}
-            className={styles.listItem}
-          >
+          <li key={item} className={styles.listItem}>
             <button
-              className={category === item ? styles.marked : ""}
+              className={category === item ? styles.marked : styles.button}
               onClick={onClick}
               id={item}
             >
