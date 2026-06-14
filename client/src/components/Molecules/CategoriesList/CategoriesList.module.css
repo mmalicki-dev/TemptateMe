@@ -3,7 +3,7 @@
   flex-wrap: nowrap;
   gap: 28px;
   border-bottom: 1px solid var(--secondBg);
-  color: var(--secondBg);
+  color: var(--titlesColor);
   overflow: scroll;
   padding: 10px 0 32px 29px;
 }

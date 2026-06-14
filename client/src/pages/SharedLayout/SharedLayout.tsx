@@ -3,12 +3,15 @@ import { Outlet } from "react-router-dom";
 import { Footer } from "../../components/Organisms/Footer/Footer.tsx";
 import { Header } from "../../components/Organisms/Header/Header.tsx";
 import { useAuth } from "../../hooks/index.ts";
+import { useDarkMode } from "../../context/DarkModeContext.tsx";
 import { Loader } from "../../components/Atoms/Loader/Loader.tsx";
+import styles from "./SharedLayout.module.css";
 
 const SharedLayout = () => {
   const { isLoggedIn } = useAuth();
+  const { isDark } = useDarkMode();
   return (
-    <div>
+    <div className={isDark ? styles.wrapperDark : styles.wrapper}>
       {isLoggedIn && <Header />}
       <Suspense
         fallback={
