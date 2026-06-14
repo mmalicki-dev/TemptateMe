@@ -10,7 +10,11 @@ import styles from "./App.module.css";
 import { refresh } from "../../redux/auth/operations.ts";
 import { useDarkMode } from "../../context/DarkModeContext.tsx";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
+import { Loading } from "notiflix/build/notiflix-loading-aio";
 import type { AppDispatch } from "../../redux/store.ts";
+
+Notify.init({ fontFamily: "Poppins, sans-serif" });
+Loading.init({ fontFamily: "Poppins, sans-serif" });
 
 const HomePage = lazy(() =>
   import("../Home/HomePage.tsx").then((module) => ({ default: module.HomePage }))

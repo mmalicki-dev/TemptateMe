@@ -5,6 +5,7 @@ import { MyRecipesList } from "../../components/Organisms/MyRecipesList/MyRecipe
 import { useRecipes } from "../../hooks/index.ts";
 import { useDispatch } from "react-redux";
 import { fetchFavorites } from "../../redux/recipes/operations.ts";
+import { clearItems } from "../../redux/recipes/slice.ts";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import type { AppDispatch } from "../../redux/store.ts";
@@ -14,6 +15,7 @@ const FavoritesPage = () => {
   const { page, pageAmount } = useRecipes();
 
   useEffect(() => {
+    dispatch(clearItems());
     dispatch(fetchFavorites(page));
   }, [dispatch, page]);
 

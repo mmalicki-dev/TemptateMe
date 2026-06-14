@@ -65,7 +65,12 @@ const initialState: RecipesState = {
 const recipesSlice = createSlice({
   name: "recipes",
   initialState,
-  reducers: {},
+  reducers: {
+    clearItems: (state) => {
+      state.items = [];
+      state.isLoading = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRecipeById.fulfilled, (state, action) => {
@@ -102,4 +107,5 @@ const recipesSlice = createSlice({
   },
 });
 
+export const { clearItems } = recipesSlice.actions;
 export const recipesReducer = recipesSlice.reducer;
