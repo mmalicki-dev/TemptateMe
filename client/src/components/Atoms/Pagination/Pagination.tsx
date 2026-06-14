@@ -18,7 +18,7 @@ const Pagination = () => {
 
   const onClick = (event: MouseEvent<HTMLButtonElement>) => {
     const target = event.target as HTMLElement;
-    if (target.nodeName === "LI") {
+    if (target.nodeName === "DIV") {
       dispatch(updatePage(Number(target.id)));
       setSearchParams({
         ...Object.fromEntries(searchParams),

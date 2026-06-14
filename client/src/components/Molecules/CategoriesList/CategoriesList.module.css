@@ -6,7 +6,6 @@
   color: var(--secondBg);
   overflow: scroll;
   padding: 10px 0 32px 29px;
-  cursor: pointer;
 }
 
 .listItem {
