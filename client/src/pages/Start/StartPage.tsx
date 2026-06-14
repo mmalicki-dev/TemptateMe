@@ -8,16 +8,21 @@ import { login } from "../../redux/auth/operations.ts";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import type { AppDispatch } from "../../redux/store.ts";
 
+const DEMO_EMAIL = import.meta.env.VITE_DEMO_USER_EMAIL as string | undefined;
+const DEMO_PASSWORD = import.meta.env.VITE_DEMO_PASSWORD as string | undefined;
+
 const StartPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
 
   const handleDemo = async () => {
+    if (!DEMO_EMAIL || !DEMO_PASSWORD) {
+      Notify.failure("Demo account is not configured.");
+      return;
+    }
     setLoading(true);
     try {
-      await dispatch(
-        login({ email: "example@example.com", password: "example" })
-      ).unwrap();
+      await dispatch(login({ email: DEMO_EMAIL, password: DEMO_PASSWORD })).unwrap();
     } catch {
       Notify.failure("Demo account unavailable. Please try again.");
     } finally {
