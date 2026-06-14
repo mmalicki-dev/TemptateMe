@@ -5,8 +5,8 @@ const selectShoppingList = (state: RootState): ShoppingItem[] => {
   const items = state.shoppingList.items;
   if (items.length < 1) return items;
   return items.toSorted((a, b) => {
-    const nameA = a.recipeName.toUpperCase();
-    const nameB = b.recipeName.toUpperCase();
+    const nameA = (a.recipeName ?? "").toUpperCase();
+    const nameB = (b.recipeName ?? "").toUpperCase();
     if (nameA < nameB) return -1;
     if (nameA > nameB) return 1;
     return 0;
