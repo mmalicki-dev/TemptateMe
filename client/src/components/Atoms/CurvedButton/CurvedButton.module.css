@@ -35,7 +35,6 @@
 
 .transparent {
   border-color: var(--accent);
-  /* color: var(--secondColor); */
 }
 
 .transparent:hover {
@@ -52,6 +51,38 @@
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.disabledWrapper {
+  position: relative;
+  display: inline-block;
+  cursor: not-allowed;
+}
+
+.disabledWrapper .CurvedButton:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.disabledWrapper::after {
+  content: "⛔ Disabled in demo mode";
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.disabledWrapper:hover::after {
+  opacity: 1;
 }
 
 @media screen and (min-width: 768px) {
