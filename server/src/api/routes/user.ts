@@ -12,17 +12,18 @@ import {
   updateUsersAvatar,
   updateUsersInfo,
 } from "../controllers/user/index.js";
-import { auth, fileMiddleware } from "../middlewares/index.js";
+import { auth, checkDemo, fileMiddleware } from "../middlewares/index.js";
 
 const router = Router();
 
 router.put(
   "/edit/avatar",
   auth,
+  checkDemo,
   fileMiddleware.single("avatar"),
   updateUsersAvatar
 );
-router.put("/edit/info", auth, updateUsersInfo);
+router.put("/edit/info", auth, checkDemo, updateUsersInfo);
 
 // FUNCTIONALITY
 router.post("/subscribe", auth, newsletter);
@@ -31,13 +32,13 @@ router.get("/shopping", auth, getShoppingList);
 router.post("/shopping", auth, addProduct);
 router.patch("/shopping", auth, removeProduct);
 router.get("/ownRecipes", auth, getUsersRecipes);
-router.post("/ownRecipes", auth, addRecipe);
+router.post("/ownRecipes", auth, checkDemo, addRecipe);
 router.post(
   "/ownRecipes/image",
   auth,
   fileMiddleware.single("recipeImage"),
   addRecipeImage
 );
-router.delete("/ownRecipes/:recipeId", auth, removeRecipe);
+router.delete("/ownRecipes/:recipeId", auth, checkDemo, removeRecipe);
 
 export default router;

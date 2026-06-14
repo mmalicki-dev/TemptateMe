@@ -22,7 +22,7 @@ export default async function checkAuth(
 
   try {
     req.user = verify(token, jwtSecretKey) as { _id: string };
-  } catch (err) {
+  } catch {
     fail(res, "Invalid token.", 401);
     return;
   }

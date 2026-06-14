@@ -32,5 +32,6 @@ export const emailjsPrivateKey = env('EMAILJS_PRIVATE_KEY');
 export const emailjsVerificationTemplateId = env('EMAILJS_VERIFICATION_TEMPLATE_ID');
 export const clientUrl = process.env.CLIENT_URL ?? 'http://localhost:3000';
 export const serverUrl = process.env.SERVER_URL ?? 'http://localhost:3001';
+export const demoUserEmail = process.env.DEMO_USER_EMAIL;
 export const prefix = '/api';
 export const specs = '/docs';
